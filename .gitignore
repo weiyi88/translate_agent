@@ -1,0 +1,6 @@
+/demo/
+__pycache__/
+.env
+app/output/
+app/uploads/
+app/logs/

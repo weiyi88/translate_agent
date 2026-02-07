@@ -5,3 +5,8 @@ app/output/
 app/uploads/
 app/logs/
 .spec-workflow/
+.claude/
+_bmad-output/
+_bmad/
+app/util/pptx.py.backup
+demo.py

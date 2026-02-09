@@ -57,3 +57,7 @@ web/build/
 web/.vercel/
 web/next-env.d.ts
 .chat_history/
+
+app/output
+demo.py
+app/uploads

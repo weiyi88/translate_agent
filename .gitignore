@@ -56,3 +56,4 @@ web/out/
 web/build/
 web/.vercel/
 web/next-env.d.ts
+.chat_history/

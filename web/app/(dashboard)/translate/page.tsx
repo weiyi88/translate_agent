@@ -14,6 +14,7 @@ import { LanguageSelector, QuickLanguageSelector } from '@/components/translate/
 import { ModelSelector, ModelComparison } from '@/components/translate/model-selector';
 import { ProgressBar, ProgressStatus } from '@/components/translate/progress-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { apiClient } from '@/lib/api';
 
 export default function TranslatePage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -22,6 +23,9 @@ export default function TranslatePage() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<ProgressStatus>('idle');
   const [selectedTab, setSelectedTab] = useState<'upload' | 'chat' | 'history'>('upload');
+  const [currentTaskId, setCurrentTaskId] = useState<string>();
+  const [outputUrl, setOutputUrl] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const handleTranslate = async () => {
     if (files.length === 0) {
@@ -29,32 +33,105 @@ export default function TranslatePage() {
       return;
     }
 
-    setStatus('uploading');
-    setProgress(0);
+    try {
+      // 1. 上传文件
+      setStatus('uploading');
+      setProgress(10);
+      setErrorMessage(undefined);
 
-    // Simulate upload
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setProgress(20);
+      const uploadResults = await Promise.all(
+        files.map(file => apiClient.uploadFile(file))
+      );
 
-    setStatus('processing');
+      // 检查上传错误
+      const uploadError = uploadResults.find(r => r.error);
+      if (uploadError) {
+        setStatus('error');
+        setErrorMessage(uploadError.error || '文件上传失败');
+        return;
+      }
 
-    // Simulate translation
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setStatus('completed');
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 500);
+      setProgress(30);
+
+      // 2. 创建翻译任务
+      const filePaths = uploadResults.map(r => r.data!.file_path);
+      const tasks = filePaths.map(filePath => ({
+        file_path: filePath,
+        file_type: getFileType(filePath),
+        target_language: targetLanguage,
+        model: model,
+        priority: 5,
+      }));
+
+      const createResponse = tasks.length === 1
+        ? await apiClient.createTask(tasks[0])
+        : await apiClient.createTasksBatch(tasks);
+
+      if (createResponse.error) {
+        setStatus('error');
+        setErrorMessage(createResponse.error);
+        return;
+      }
+
+      const taskId = Array.isArray(createResponse.data)
+        ? createResponse.data[0].task_id
+        : createResponse.data!.task_id;
+
+      setCurrentTaskId(taskId);
+      setProgress(40);
+      setStatus('processing');
+
+      // 3. 轮询任务状态
+      const pollResponse = await apiClient.pollTaskStatus(
+        taskId,
+        (result) => {
+          // 更新进度
+          const newProgress = 40 + (result.progress / 100) * 60;
+          setProgress(newProgress);
+        },
+        1000, // 每秒轮询一次
+        300   // 最多5分钟
+      );
+
+      if (pollResponse.error) {
+        setStatus('error');
+        setErrorMessage(pollResponse.error);
+        return;
+      }
+
+      if (pollResponse.data?.status === 'completed') {
+        setStatus('completed');
+        setProgress(100);
+        setOutputUrl(pollResponse.data.output_path || undefined);
+      } else if (pollResponse.data?.status === 'failed') {
+        setStatus('error');
+        setErrorMessage(pollResponse.data.error || '翻译失败');
+      }
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : '未知错误');
+    }
+  };
+
+  const getFileType = (filePath: string): 'pptx' | 'docx' | 'xlsx' | 'pdf' => {
+    const ext = filePath.split('.').pop()?.toLowerCase();
+    return (ext as any) || 'pptx';
   };
 
   const handleReset = () => {
     setFiles([]);
     setProgress(0);
     setStatus('idle');
+    setCurrentTaskId(undefined);
+    setOutputUrl(undefined);
+    setErrorMessage(undefined);
+  };
+
+  const handleRetry = () => {
+    if (currentTaskId) {
+      apiClient.retryTask(currentTaskId);
+    }
+    handleTranslate();
   };
 
   return (
@@ -130,7 +207,9 @@ export default function TranslatePage() {
                     value={progress}
                     status={status}
                     fileName={files[0]?.name}
-                    onRetry={handleReset}
+                    errorMessage={errorMessage}
+                    outputUrl={outputUrl}
+                    onRetry={handleRetry}
                   />
                 )}
               </div>

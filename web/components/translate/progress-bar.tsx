@@ -20,6 +20,8 @@ interface ProgressBarProps {
   outputUrl?: string;
   onRetry?: () => void;
   onCancel?: () => void;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function ProgressBar({
@@ -30,6 +32,8 @@ export function ProgressBar({
   outputUrl,
   onRetry,
   onCancel,
+  className,
+  style,
 }: ProgressBarProps) {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -77,7 +81,7 @@ export function ProgressBar({
   };
 
   return (
-    <Card className="p-6">
+    <Card className={cn("p-6", className)} style={style}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -103,12 +107,12 @@ export function ProgressBar({
             </Button>
           )}
           {status === 'completed' && outputUrl && (
-            <Button size="sm" className="btn-primary" asChild>
-              <a href={outputUrl} download>
+            <a href={outputUrl} download>
+              <Button size="sm" className="btn-primary">
                 <Download className="w-4 h-4 mr-1" />
                 下载
-              </a>
-            </Button>
+              </Button>
+            </a>
           )}
         </div>
       </div>

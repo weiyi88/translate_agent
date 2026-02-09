@@ -1,0 +1,60 @@
+2026-02-04 12:14:55,442:INFO:Logging service reconfigured for new day
+2026-02-04 12:14:55,442:INFO:Logging service launched
+2026-02-04 12:14:55,442:INFO:Application started
+2026-02-04 12:14:56,426:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 12:14:56,467:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 12:14:56,484:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 12:14:56,832:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 12:14:56,832:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 12:14:56,833:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 12:14:56,833:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 12:14:57,184:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 12:14:57,896:INFO:HTTP Request: GET http://localhost:8001/startup-events "HTTP/1.1 200 OK"
+2026-02-04 12:14:57,981:INFO:HTTP Request: HEAD http://localhost:8001/ "HTTP/1.1 200 OK"
+2026-02-04 18:53:20,433:INFO:Logging service reconfigured for new day
+2026-02-04 18:53:20,433:INFO:Logging service launched
+2026-02-04 18:53:20,433:INFO:Application started
+2026-02-04 18:53:21,558:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 18:53:21,558:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 18:53:21,559:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 18:53:21,559:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 18:53:21,559:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 18:53:21,559:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 18:53:21,559:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2026-02-04 18:53:21,839:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-04 18:53:21,902:INFO:HTTP Request: GET http://localhost:8001/startup-events "HTTP/1.1 200 OK"
+2026-02-04 18:53:21,941:INFO:HTTP Request: HEAD http://localhost:8001/ "HTTP/1.1 200 OK"
+2026-02-04 18:55:15,315:INFO:------ 开始翻译文件 ------ 文件名: AI翻译优化需求.pptx, 文件类型: pptx, 目标语言: English, 语言模型: xxx
+2026-02-04 18:55:15,583:INFO:--------------------目前进度页数: 0
+2026-02-04 18:55:15,587:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,588:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,588:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,589:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,589:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,589:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,590:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,590:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,590:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,591:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,591:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:15,591:INFO:=============翻译前: ['科学技術の進化 + 普及の迭代、二つの柱で攻勢をかける\\n広汽トヨタの発言権争奪戦がすでに始まり、成果は顕著です', 'アルティス3Xの成功経験から\\nトヨタは計画可能、制御可能、予測可能な特色ある普及ルートを歩んでいます', '品質を基盤とし、科学技術が飛躍\\n新エネルギー時代の技術反撃戦', '話題の爆発、流量が王様\\n新メディア時代の普及攻勢戦', '第九代カムリ', '世界車、中国コックピットが広汽トヨタの科学技術反撃の第一弾を発射', 'アルティス3X', '14万級の高階知能運転の第一車として、広汽トヨタの知能運転地位を確立', '新世代のウィランダ', '中国コックピットがさらに進化し、広汽トヨタの知恵と科学技術の迭代のマイルストーン', '知能電化の進化：', '普及の迭代：']
+2026-02-04 18:55:16,371:INFO:HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-02-04 18:55:16,400:ERROR:-----------------翻译ppt 错误 error: Error code: 400 - {'code': 20012, 'message': 'Model does not exist. Please check it carefully.', 'data': None}
+2026-02-04 18:55:16,400:INFO:-----------------20260204_185515_to_English:AI翻译优化需求.pptx 翻译ppt 完成
+2026-02-04 18:55:57,200:INFO:------ 开始翻译文件 ------ 文件名: AI翻译优化需求.pptx, 文件类型: pptx, 目标语言: Greek, 语言模型: xxx
+2026-02-04 18:55:57,429:INFO:--------------------目前进度页数: 0
+2026-02-04 18:55:57,430:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,431:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,431:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,432:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,432:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,432:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,433:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,433:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,433:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,434:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,434:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2026-02-04 18:55:57,434:INFO:=============翻译前: ['科学技術の進化 + 普及の迭代、二つの柱で攻勢をかける\\n広汽トヨタの発言権争奪戦がすでに始まり、成果は顕著です', 'アルティス3Xの成功経験から\\nトヨタは計画可能、制御可能、予測可能な特色ある普及ルートを歩んでいます', '品質を基盤とし、科学技術が飛躍\\n新エネルギー時代の技術反撃戦', '話題の爆発、流量が王様\\n新メディア時代の普及攻勢戦', '第九代カムリ', '世界車、中国コックピットが広汽トヨタの科学技術反撃の第一弾を発射', 'アルティス3X', '14万級の高階知能運転の第一車として、広汽トヨタの知能運転地位を確立', '新世代のウィランダ', '中国コックピットがさらに進化し、広汽トヨタの知恵と科学技術の迭代のマイルストーン', '知能電化の進化：', '普及の迭代：']
+2026-02-04 18:55:57,604:INFO:HTTP Request: POST https://api.siliconflow.cn/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-02-04 18:55:57,607:ERROR:-----------------翻译ppt 错误 error: Error code: 400 - {'code': 20012, 'message': 'Model does not exist. Please check it carefully.', 'data': None}
+2026-02-04 18:55:57,607:INFO:-----------------20260204_185557_to_Greek:AI翻译优化需求.pptx 翻译ppt 完成

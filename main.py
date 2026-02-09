@@ -1,23 +1,114 @@
+"""
+Translate Agent - 翻译工作流引擎主入口
+"""
 import asyncio
 import logging
-from itertools import count
+from contextlib import asynccontextmanager
 
-from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from app.compent.index import launch_gradio
-from app.service.logging_service import launch_logging_service, log_message
-from app.util.config import Settings
-from app.util.index import check_file_path, read_prompt
+from app.api import api_router
+from app.core.engine import TranslationEngine
 
 
-async def main():
-    for file_name in Settings.NEED_FILE_LIST:
-        if not check_file_path(Settings.PROMPT_PATH+file_name+".txt"):
-            raise FileNotFoundError(f"{file_name} not found")
-    load_dotenv()              # 加载环境变量
-    launch_logging_service()   # 启动日志服务
-    log_message(logging.INFO, "Application started")  # 使用新的日志函数
-    await launch_gradio()
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
-if __name__ == '__main__':
-    asyncio.run(main())
+
+# 全局引擎实例
+engine: TranslationEngine = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """应用生命周期管理"""
+    global engine
+
+    # 启动
+    logger.info("Starting Translate Agent...")
+
+    engine = TranslationEngine(
+        max_concurrent_tasks=3,
+        queue_size=100,
+        max_retries=3,
+        retry_delay=1.0,
+        retry_backoff=2.0,
+    )
+
+    await engine.start()
+
+    # 注入引擎到 API 模块
+    from app.api import tasks
+    tasks.engine = engine
+
+    logger.info("Translate Agent started successfully")
+
+    yield
+
+    # 关闭
+    logger.info("Stopping Translate Agent...")
+    await engine.stop()
+    logger.info("Translate Agent stopped")
+
+
+# 创建 FastAPI 应用
+app = FastAPI(
+    title="Translate Agent",
+    description="AI Office 文档翻译工作流引擎",
+    version="0.1.0",
+    lifespan=lifespan,
+)
+
+# CORS 中间件
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 注册路由
+app.include_router(api_router)
+
+
+@app.get("/")
+async def root():
+    """根路径"""
+    return {
+        "name": "Translate Agent",
+        "version": "0.1.0",
+        "status": "running",
+        "docs": "/docs",
+    }
+
+
+@app.get("/health")
+async def health_check():
+    """健康检查"""
+    return {
+        "status": "healthy",
+        "engine_running": engine is not None and engine.is_running,
+    }
+
+
+def main():
+    """主函数"""
+    import uvicorn
+
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8002,
+        reload=True,
+        log_level="info",
+    )
+
+
+if __name__ == "__main__":
+    main()

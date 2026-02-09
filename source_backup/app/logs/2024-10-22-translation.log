@@ -1,0 +1,86 @@
+2024-10-22 11:01:30,031:INFO:Logging service reconfigured for new day
+2024-10-22 11:01:30,031:INFO:Logging service launched
+2024-10-22 11:01:30,031:INFO:Application started
+2024-10-22 11:01:30,560:INFO:HTTP Request: GET http://localhost:8001/startup-events "HTTP/1.1 200 OK"
+2024-10-22 11:01:30,573:INFO:HTTP Request: HEAD http://localhost:8001/ "HTTP/1.1 200 OK"
+2024-10-22 11:01:31,235:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:01:31,375:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:01:31,543:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:01:31,551:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:01:31,689:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:01:32,017:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:01:32,060:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:01:32,216:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:01:32,610:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:15,571:INFO:Logging service reconfigured for new day
+2024-10-22 11:02:15,571:INFO:Logging service launched
+2024-10-22 11:02:15,571:INFO:Application started
+2024-10-22 11:02:16,506:INFO:HTTP Request: GET http://localhost:8001/startup-events "HTTP/1.1 200 OK"
+2024-10-22 11:02:16,534:INFO:HTTP Request: HEAD http://localhost:8001/ "HTTP/1.1 200 OK"
+2024-10-22 11:02:16,771:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:16,944:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:17,139:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:17,267:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:17,293:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:02:17,483:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:02:17,615:INFO:HTTP Request: GET https://checkip.amazonaws.com/ "HTTP/1.1 200 "
+2024-10-22 11:02:17,669:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:02:17,800:INFO:HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2024-10-22 11:03:33,371:INFO:------ 开始翻译文件 ------ 文件名: A4广汽丰田2024年广州马拉松方案-1021V1.pptx, 文件类型: pptx, 目标语言: Japanese, 语言模型: gpt-4o
+2024-10-22 11:03:33,747:INFO:--------------------目前进度页数: 0
+2024-10-22 11:03:33,749:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,749:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,752:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,753:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,754:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,754:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,754:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,755:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,755:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,755:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,756:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,757:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,758:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,759:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,763:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,764:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,766:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:03:33,767:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,767:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,768:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,769:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,769:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:03:33,792:INFO:=============翻译前: ['广汽丰田2024年广州马拉松公关执行方案', '一，项目背景', '1、品牌理念传递：2024年广州马拉松赛将于12月8日（星期日）鸣枪起跑，广汽丰田将作为广马冠名赞助商继续助力广州马拉松赛，借助广州马拉松的挑战极限、超越自我的精神，展示广汽丰田追求卓越、不断进取创新的品牌理念；\n2、【丰跑团】运营：广汽丰田深耕体育营销不仅在于长期坚持创新和多元化探索，值广汽丰田20周年之际延续【丰跑团】运营，还体现了体育精神和广汽丰田长期主义的高度融合，更巩固了媒体关系的长线维护，持续放大广州马拉松和广汽丰田的对外影响；\n3、费用优化：通过轻运营、场地及物料费用多平台、多渠道比价管理等方式对费用进行优化改善，同时24年参与人数比23年减少4人，整体费用降低11%但接待标准保持以往水平。', '媒体传播计划：\n1.广丰媒体跑团50家50人朋友圈扩散活动素材，强化广汽丰田二十周年形象以及智能化规划。\n2.全网发稿50家媒体，利用赛事权益最大程度提升广汽丰田品牌形象，助力区域销售。\n3.通过增加大湾区kol达人传播费用，加大广马短视频二创露出，通过【丰跑团】丰富广丰二十周年形象，增强品牌影响力。', '费用', '媒体费用', '公关公司费用', '税费', '合计', '75w', '5w', '4.8w', '84.8w', '六 、费用', '四，传播规划', '五，推进规划', '1.本次广马参考最新媒体库、主动询问媒体、过往有邀请记录（广马、厦马），今年共有全马名额50人；\n2.筛选以往参与过马拉松以及体能较好的，与广汽丰田关系较好的库内媒体，以广州马拉松为契机，进行媒体关系维护，同时在过程中输出广汽丰田二十周年庆品牌形象传播以及进行新车上市认知度提升；\n3.目前主动咨询媒体31家33人，同时增加的比较有影响力的媒体，后续将持续筛选合适的媒体。', '二，执行规划', '内部资料', '持续运营广汽丰田【丰跑团】，借助线下活动反哺线上传播，提升广汽丰田品牌传播声量', '借线下深度链接媒体，巩固品牌口碑护城河', '邀请媒体参加广州马拉松，让跑团媒体感受广汽丰田现场的智能化规划及广州车展要素内容，借线下活动深度链接媒体，并通过带逛博览会和纪念品打卡最大化提升媒体参与感，维持长期友好关系。', '强化重点车型传播声量，助力销售转化', '通过跑团媒体的传播渠道，传递现场活动的氛围感和展示的重点车型信息，同时吸引用户打卡关注广马赛事和广汽丰田新车资讯，在提升品牌声量的同时，助力新车的认知度提升。', '三，媒体选择策略', '项目', '内容', '11月', '12月', 'W1', 'W2', 'W3', 'W4', 'W1', 'W2', 'W3', 'W4', '媒体名单', '媒体名单', '汇报、修改、最终确认', '方案', '执行内容、预算等', '汇报、修改', '广马比赛日', '媒体沟通', '参赛与否、日程、装备尺码确认', '媒体沟通', '装备', '确认、购买、印制logo、快递', '购买', '印制logo', '快递 发出', '快递 抵达', '安全承诺书', '撰写、签署', '撰写确认', '签署安全承诺书', '机票', '往返机票购买', '收集机票信息', '购买', '酒店', '预定、付款、', '方案汇报', '确认、预定', '付款', '传播', '传播素材', '制作', '最终确认', '媒体传播', '发布']
+2024-10-22 11:03:51,579:INFO:HTTP Request: POST https://api.gptsapi.net/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-22 11:03:51,637:INFO:+++++++++++++++翻译结果: ['広汽トヨタ2024年広州マラソンPR実行プラン', '一、プロジェクトの背景', '1、ブランド理念の伝達：2024年広州マラソンは12月8日（日曜日）にスタートし、広汽トヨタは引き続き広州マラソンの冠スポンサーとして協力し、広州マラソンの挑戦する精神、自分を超越する精神を借りて、広汽トヨタの卓越性を追求し、不断に進取し革新するブランド理念を展示します。\n2、【豊ランニングチーム】の運営：広汽トヨタはスポーツマーケティングに深く根ざしており、長期的に革新と多元的な探求を堅持するだけでなく、広汽トヨタ20周年の際に【豊ランニングチーム】の運営を継続し、スポーツ精神と広汽トヨタの長期主義の高度な融合を体現し、メディア関係の長期的な維持を強化し、広州マラソンと広汽トヨタの外部影響を持続的に拡大します。\n3、費用の最適化：軽運営、会場および物品費用の多プラットフォーム、多チャネルの価格比較管理などの方法を通じて費用を最適化改善し、24年の参加人数は23年より4人減少し、全体の費用は11%減少しましたが、接待基準は従来のレベルを維持しています。', 'メディア伝播計画：\n1.広汽トヨタメディアランニングチーム50社50人の友達圏拡散活動素材を提供し、広汽トヨタの20周年イメージおよびスマート化計画を強化します。\n2.全ネットで50社のメディアに記事を掲載し、競技会の権利を最大限に利用して広汽トヨタのブランドイメージを向上させ、地域の販売を支援します。\n3.大湾区のKOLインフルエンサーの伝播費用を増やし、広州マラソンの短編動画の二次創作露出を増やし、【豊ランニングチーム】を通じて広汽トヨタ20周年のイメージを豊かにし、ブランド影響力を高めます。', '費用', 'メディア費用', 'PR会社費用', '税金', '合計', '75万元', '5万元', '4.8万元', '84.8万元', '六、費用', '四、伝播計画', '五、推進計画', '1.今回の広州マラソンは最新のメディアリストを参考にし、積極的にメディアに問い合わせ、過去に招待履歴のある（広州マラソン、厦門マラソン）メディアを基に、今年は全マラソンの枠を50人に設定しました。\n2.過去にマラソンに参加したことがあり、体力が良く、広汽トヨタとの関係が良好なメディアを選び、広州マラソンを契機にメディア関係を維持し、同時に広汽トヨタ20周年のブランドイメージを伝播し、新車の発売認知度を向上させます。\n3.現在、積極的に問い合わせたメディアは31社33人で、影響力のあるメディアを追加し、今後も適切なメディアを選定し続けます。', '二、実行計画', '内部資料', '広汽トヨタ【豊ランニングチーム】を継続運営し、オフライン活動を通じてオンライン伝播を促進し、広汽トヨタのブランド伝播の声量を高めます', 'オフラインでメディアと深くリンクし、ブランドの評判の堀を固めます', 'メディアを広州マラソンに招待し、ランニングチームのメディアが広汽トヨタの現場のスマート化計画および広州モーターショーの要素内容を体験し、オフライン活動を通じてメディアと深くリンクし、展示会の案内と記念品のスタンプラリーを通じてメディアの参加感を最大化し、長期的な友好関係を維持します。', '重点車種の伝播声量を強化し、販売転換を支援します', 'ランニングチームのメディアの伝播チャネルを通じて、現場活動の雰囲気と展示される重点車種の情報を伝え、ユーザーが広州マラソンと広汽トヨタの新車情報に注目するよう引き付け、ブランドの声量を高めるとともに、新車の認知度を向上させます。', '三、メディア選定戦略', 'プロジェクト', '内容', '11月', '12月', '第1週', '第2週', '第3週', '第4週', '第1週', '第2週', '第3週', '第4週', 'メディアリスト', 'メディアリスト', '報告、修正、最終確認', 'プラン', '実行内容、予算など', '報告、修正', '広州マラソン当日', 'メディアとのコミュニケーション', '参加の有無、スケジュール、装備サイズの確認', 'メディアとのコミュニケーション', '装備', '確認、購入、ロゴの印刷、発送', '購入', 'ロゴ印刷', '発送', '発送到着', '安全誓約書', '作成、署名', '作成確認', '安全誓約書の署名', '航空券', '往復航空券の購入', '航空券情報の収集', '購入', 'ホテル', '予約、支払い', 'プラン報告', '確認、予約', '支払い', '伝播', '伝播素材', '作成', '最終確認', 'メディア伝播', '公開']
+2024-10-22 11:03:51,689:INFO:-----------------20241022_110333_to_Japanese:A4广汽丰田2024年广州马拉松方案-1021V1.pptx 翻译ppt 完成
+2024-10-22 11:04:27,688:INFO:------ 开始翻译文件 ------ 文件名: A4广汽丰田2024年广州马拉松方案-1021V1.pptx, 文件类型: pptx, 目标语言: Japanese, 语言模型: gpt-4o
+2024-10-22 11:07:39,303:INFO:--------------------目前进度页数: 0
+2024-10-22 11:07:39,305:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,306:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,310:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,312:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,312:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,312:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,313:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,313:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,314:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,314:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,314:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,316:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,317:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,317:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,318:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,319:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,320:WARNING:获取字体信息时出错: no .rgb property on color type '_SchemeColor'
+2024-10-22 11:07:39,321:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,322:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,323:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,323:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,324:WARNING:获取字体信息时出错: no .rgb property on color type '_NoneColor'
+2024-10-22 11:07:39,346:INFO:=============翻译前: ['广汽丰田2024年广州马拉松公关执行方案', '一，项目背景', '1、品牌理念传递：2024年广州马拉松赛将于12月8日（星期日）鸣枪起跑，广汽丰田将作为广马冠名赞助商继续助力广州马拉松赛，借助广州马拉松的挑战极限、超越自我的精神，展示广汽丰田追求卓越、不断进取创新的品牌理念；\n2、【丰跑团】运营：广汽丰田深耕体育营销不仅在于长期坚持创新和多元化探索，值广汽丰田20周年之际延续【丰跑团】运营，还体现了体育精神和广汽丰田长期主义的高度融合，更巩固了媒体关系的长线维护，持续放大广州马拉松和广汽丰田的对外影响；\n3、费用优化：通过轻运营、场地及物料费用多平台、多渠道比价管理等方式对费用进行优化改善，同时24年参与人数比23年减少4人，整体费用降低11%但接待标准保持以往水平。', '媒体传播计划：\n1.广丰媒体跑团50家50人朋友圈扩散活动素材，强化广汽丰田二十周年形象以及智能化规划。\n2.全网发稿50家媒体，利用赛事权益最大程度提升广汽丰田品牌形象，助力区域销售。\n3.通过增加大湾区kol达人传播费用，加大广马短视频二创露出，通过【丰跑团】丰富广丰二十周年形象，增强品牌影响力。', '费用', '媒体费用', '公关公司费用', '税费', '合计', '75w', '5w', '4.8w', '84.8w', '六 、费用', '四，传播规划', '五，推进规划', '1.本次广马参考最新媒体库、主动询问媒体、过往有邀请记录（广马、厦马），今年共有全马名额50人；\n2.筛选以往参与过马拉松以及体能较好的，与广汽丰田关系较好的库内媒体，以广州马拉松为契机，进行媒体关系维护，同时在过程中输出广汽丰田二十周年庆品牌形象传播以及进行新车上市认知度提升；\n3.目前主动咨询媒体31家33人，同时增加的比较有影响力的媒体，后续将持续筛选合适的媒体。', '二，执行规划', '内部资料', '持续运营广汽丰田【丰跑团】，借助线下活动反哺线上传播，提升广汽丰田品牌传播声量', '借线下深度链接媒体，巩固品牌口碑护城河', '邀请媒体参加广州马拉松，让跑团媒体感受广汽丰田现场的智能化规划及广州车展要素内容，借线下活动深度链接媒体，并通过带逛博览会和纪念品打卡最大化提升媒体参与感，维持长期友好关系。', '强化重点车型传播声量，助力销售转化', '通过跑团媒体的传播渠道，传递现场活动的氛围感和展示的重点车型信息，同时吸引用户打卡关注广马赛事和广汽丰田新车资讯，在提升品牌声量的同时，助力新车的认知度提升。', '三，媒体选择策略', '项目', '内容', '11月', '12月', 'W1', 'W2', 'W3', 'W4', 'W1', 'W2', 'W3', 'W4', '媒体名单', '媒体名单', '汇报、修改、最终确认', '方案', '执行内容、预算等', '汇报、修改', '广马比赛日', '媒体沟通', '参赛与否、日程、装备尺码确认', '媒体沟通', '装备', '确认、购买、印制logo、快递', '购买', '印制logo', '快递 发出', '快递 抵达', '安全承诺书', '撰写、签署', '撰写确认', '签署安全承诺书', '机票', '往返机票购买', '收集机票信息', '购买', '酒店', '预定、付款、', '方案汇报', '确认、预定', '付款', '传播', '传播素材', '制作', '最终确认', '媒体传播', '发布']
+2024-10-22 11:07:39,352:WARNING:Error in LangChainTracer.on_chain_start callback: RuntimeError('cannot schedule new futures after shutdown')
+2024-10-22 11:07:39,355:WARNING:Error in LangChainTracer.on_chain_start callback: RuntimeError('cannot schedule new futures after shutdown')
+2024-10-22 11:07:39,356:WARNING:Error in LangChainTracer.on_chain_end callback: RuntimeError('cannot schedule new futures after shutdown')
+2024-10-22 11:07:39,357:WARNING:Error in LangChainTracer.on_chat_model_start callback: RuntimeError('cannot schedule new futures after shutdown')
+2024-10-22 11:07:39,455:WARNING:Error in LangChainTracer.on_chain_error callback: RuntimeError('cannot schedule new futures after shutdown')

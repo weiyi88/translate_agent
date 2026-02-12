@@ -1,0 +1,214 @@
+// Prisma Schema for AI Office Translation Platform
+// Version: v3.0.0 (Next.js Full-Stack)
+// Database: PostgreSQL 15+
+// Generated: 2026-02-12
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum SubscriptionPlan {
+  FREE        // 免费版: 10 页/月
+  PRO         // 专业版: 无限翻译
+  ENTERPRISE  // 企业版: 定制化
+}
+
+enum SubscriptionStatus {
+  ACTIVE   // 激活中
+  CANCELED // 已取消
+  EXPIRED  // 已过期
+  TRIAL    // 试用中
+}
+
+enum BillingCycle {
+  MONTHLY // 月付
+  YEARLY  // 年付
+}
+
+enum FileType {
+  PPTX
+  DOCX
+  XLSX
+  PDF
+}
+
+enum TaskStatus {
+  PENDING    // 待处理
+  QUEUED     // 已排队
+  PROCESSING // 处理中
+  COMPLETED  // 已完成
+  FAILED     // 失败
+  CANCELED   // 已取消
+}
+
+enum ErrorType {
+  API_ERROR         // API 调用错误
+  FILE_ERROR        // 文件处理错误
+  TRANSLATION_ERROR // 翻译错误
+  SYSTEM_ERROR      // 系统错误
+  QUOTA_EXCEEDED    // 配额超限
+}
+
+enum UsageAction {
+  TRANSLATION      // 翻译操作
+  API_CALL         // API 调用
+  GLOSSARY_CREATE  // 创建词库
+  FILE_UPLOAD      // 文件上传
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String?
+  avatar       String?
+  isActive     Boolean   @default(true) @map("is_active")
+  isVerified   Boolean   @default(false) @map("is_verified")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  subscription      Subscription?     @relation("UserSubscription")
+  translationTasks  TranslationTask[] @relation("UserTasks")
+  glossaries        Glossary[]        @relation("UserGlossaries")
+  usageLogs         UsageLog[]        @relation("UserLogs")
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model Subscription {
+  id                   String              @id @default(uuid())
+  userId               String              @unique @map("user_id")
+  plan                 SubscriptionPlan    @default(FREE)
+  status               SubscriptionStatus  @default(ACTIVE)
+  billingCycle         BillingCycle?       @map("billing_cycle")
+  currentPeriodStart   DateTime?           @map("current_period_start")
+  currentPeriodEnd     DateTime?           @map("current_period_end")
+  cancelAtPeriodEnd    Boolean             @default(false) @map("cancel_at_period_end")
+  stripeCustomerId     String?             @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?             @unique @map("stripe_subscription_id")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation("UserSubscription", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([stripeCustomerId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+model TranslationTask {
+  id               String     @id @default(uuid())
+  userId           String     @map("user_id")
+  fileName         String     @map("file_name")
+  fileType         FileType   @map("file_type")
+  filePath         String     @map("file_path")
+  sourceLanguage   String?    @map("source_language")
+  targetLanguage   String     @map("target_language")
+  model            String
+  glossaryId       String?    @map("glossary_id")
+  status           TaskStatus @default(PENDING)
+  priority         Int        @default(5)
+  progress         Float      @default(0)
+  outputPath       String?    @map("output_path")
+  errorType        ErrorType? @map("error_type")
+  errorMessage     String?    @map("error_message")
+  retryCount       Int        @default(0) @map("retry_count")
+  pagesCount       Int?       @map("pages_count")
+  estimatedTokens  Int?       @map("estimated_tokens")
+  actualTokens     Int?       @map("actual_tokens")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  startedAt        DateTime?  @map("started_at")
+  completedAt      DateTime?  @map("completed_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  user     User      @relation("UserTasks", fields: [userId], references: [id], onDelete: Cascade)
+  glossary Glossary? @relation("TaskGlossary", fields: [glossaryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([userId, status])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("translation_tasks")
+}
+
+model Glossary {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  name           String
+  description    String?
+  targetLanguage String   @map("target_language")
+  termCount      Int      @default(0) @map("term_count")
+  isShared       Boolean  @default(false) @map("is_shared")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user             User              @relation("UserGlossaries", fields: [userId], references: [id], onDelete: Cascade)
+  terms            Term[]            @relation("GlossaryTerms")
+  translationTasks TranslationTask[] @relation("TaskGlossary")
+
+  @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("glossaries")
+}
+
+model Term {
+  id          String   @id @default(uuid())
+  glossaryId  String   @map("glossary_id")
+  source      String
+  target      String
+  context     String?
+  category    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  glossary Glossary @relation("GlossaryTerms", fields: [glossaryId], references: [id], onDelete: Cascade)
+
+  @@index([glossaryId])
+  @@index([glossaryId, source])
+  @@index([category])
+  @@map("terms")
+}
+
+model UsageLog {
+  id         String       @id @default(uuid())
+  userId     String       @map("user_id")
+  action     UsageAction
+  pagesCount Int?         @map("pages_count")
+  tokensUsed Int?         @map("tokens_used")
+  model      String?
+  taskId     String?      @map("task_id")
+  cost       Float?
+  metadata   Json?
+  createdAt  DateTime     @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation("UserLogs", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([action])
+  @@index([createdAt(sort: Desc)])
+  @@map("usage_logs")
+}

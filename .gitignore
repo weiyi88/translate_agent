@@ -50,3 +50,4 @@ next-env.d.ts
 app/output
 demo.py
 app/uploads
+v3_prd.md

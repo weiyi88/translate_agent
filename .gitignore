@@ -1,27 +1,16 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-.venv/
-venv/
-ENV/
+# Python (moved to source_back/)
+source_back/__pycache__/
+source_back/**/*.py[cod]
+source_back/**/*$py.class
+source_back/**/*.so
+source_back/.Python
+source_back/build/
+source_back/dist/
+source_back/.venv/
+source_back/venv/
+source_back/ENV/
+source_back/lib/
+source_back/lib64/
 
 # Environment
 .env
@@ -39,24 +28,22 @@ ENV/
 Thumbs.db
 
 # Project specific
-source_backup/
+source_back/
 .spec-workflow/
 .claude/
-_bmad-output/
-_bmad/
 cc_code/
 
 # Logs
 *.log
 logs/
 
-# Next.js (web/)
-web/node_modules/
-web/.next/
-web/out/
-web/build/
-web/.vercel/
-web/next-env.d.ts
+# Next.js
+node_modules/
+.next/
+out/
+build/
+.vercel/
+next-env.d.ts
 .chat_history/
 
 app/output

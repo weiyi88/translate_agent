@@ -34,63 +34,39 @@ export default function TranslatePage() {
     }
 
     try {
-      // 1. 上传文件
       setStatus('uploading');
       setProgress(10);
       setErrorMessage(undefined);
 
-      const uploadResults = await Promise.all(
-        files.map(file => apiClient.uploadFile(file))
+      // 上传文件并创建翻译任务（新 API）
+      const file = files[0]; // MVP 只支持单文件
+      const uploadResponse = await apiClient.uploadAndTranslate(
+        file,
+        targetLanguage,
+        model
       );
 
-      // 检查上传错误
-      const uploadError = uploadResults.find(r => r.error);
-      if (uploadError) {
+      if (uploadResponse.error) {
         setStatus('error');
-        setErrorMessage(uploadError.error || '文件上传失败');
+        setErrorMessage(uploadResponse.error);
         return;
       }
 
-      setProgress(30);
-
-      // 2. 创建翻译任务
-      const filePaths = uploadResults.map(r => r.data!.file_path);
-      const tasks = filePaths.map(filePath => ({
-        file_path: filePath,
-        file_type: getFileType(filePath),
-        target_language: targetLanguage,
-        model: model,
-        priority: 5,
-      }));
-
-      const createResponse = tasks.length === 1
-        ? await apiClient.createTask(tasks[0])
-        : await apiClient.createTasksBatch(tasks);
-
-      if (createResponse.error) {
-        setStatus('error');
-        setErrorMessage(createResponse.error);
-        return;
-      }
-
-      const taskId = Array.isArray(createResponse.data)
-        ? createResponse.data[0].task_id
-        : createResponse.data!.task_id;
-
+      const taskId = uploadResponse.data!.task_id;
       setCurrentTaskId(taskId);
-      setProgress(40);
+      setProgress(30);
       setStatus('processing');
 
-      // 3. 轮询任务状态
+      // 轮询任务状态
       const pollResponse = await apiClient.pollTaskStatus(
         taskId,
         (result) => {
           // 更新进度
-          const newProgress = 40 + (result.progress / 100) * 60;
+          const newProgress = 30 + (result.progress / 100) * 70;
           setProgress(newProgress);
         },
-        1000, // 每秒轮询一次
-        300   // 最多5分钟
+        2000, // 每 2 秒轮询一次
+        300   // 最多 10 分钟
       );
 
       if (pollResponse.error) {
@@ -102,20 +78,16 @@ export default function TranslatePage() {
       if (pollResponse.data?.status === 'completed') {
         setStatus('completed');
         setProgress(100);
-        setOutputUrl(pollResponse.data.output_path || undefined);
+        // 使用新的下载 URL 方法
+        setOutputUrl(apiClient.getDownloadUrl(taskId));
       } else if (pollResponse.data?.status === 'failed') {
         setStatus('error');
-        setErrorMessage(pollResponse.data.error || '翻译失败');
+        setErrorMessage(pollResponse.data.error_message || '翻译失败');
       }
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : '未知错误');
     }
-  };
-
-  const getFileType = (filePath: string): 'pptx' | 'docx' | 'xlsx' | 'pdf' => {
-    const ext = filePath.split('.').pop()?.toLowerCase();
-    return (ext as any) || 'pptx';
   };
 
   const handleReset = () => {
@@ -128,9 +100,6 @@ export default function TranslatePage() {
   };
 
   const handleRetry = () => {
-    if (currentTaskId) {
-      apiClient.retryTask(currentTaskId);
-    }
     handleTranslate();
   };
 
@@ -316,9 +285,14 @@ export default function TranslatePage() {
 
           {/* History Tab */}
           <TabsContent value="history" className="space-y-6">
-            <Card className="p-6">
+            <Card className="p-6 text-center">
               <h2 className="text-lg font-display font-semibold mb-4">翻译历史</h2>
-              <p className="text-gray-600">查看历史翻译记录，即将推出...</p>
+              <p className="text-gray-600 mb-4">查看和管理所有翻译记录</p>
+              <Link href="/dashboard/history">
+                <Button className="btn-primary">
+                  查看完整历史记录
+                </Button>
+              </Link>
             </Card>
           </TabsContent>
         </Tabs>

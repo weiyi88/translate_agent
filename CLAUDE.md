@@ -2,67 +2,83 @@
 
 AI Office 文档翻译服务，支持 PPT/Word/Excel/PDF 智能翻译并保留格式。
 
-**版本**: v2.0.0 | **架构**: FastAPI + Next.js | **数据库**: PostgreSQL
+**版本**: v3.0.0 | **架构**: Next.js 全栈 | **数据库**: PostgreSQL
 
 ---
 
 ## 快速启动
 
 ```bash
-# 后端
-source .venv/bin/activate && python main.py
+# 安装依赖
+npm install
 
-# 前端
-cd web && npm run dev
+# 开发模式
+npm run dev
 
-# 状态检查
-./check_status.sh
+# 生产构建
+npm run build && npm start
 ```
 
 **访问地址**:
-- 前端: http://localhost:3001/translate
-- 后端 API: http://localhost:8002/docs
+- 应用: http://localhost:3000
+- API 文档: http://localhost:3000/api (TODO)
 
 ---
 
 ## 核心架构
 
 ```
-用户浏览器 (Next.js)
-  ↓ HTTP
-FastAPI (app/)
-  ├── api/          路由层
-  ├── core/         业务层 (engine, scheduler)
-  ├── services/     服务层 (llm, office)
-  └── models/       数据层
+用户浏览器
+  ↓
+Next.js 14 (App Router)
+  ├── app/              前端页面
+  │   ├── (dashboard)/  主应用
+  │   └── (pricing)/    定价页
+  ├── app/api/          后端 API Routes
+  │   ├── translate/    翻译接口
+  │   └── history/      历史记录
+  ├── components/       UI 组件
+  └── lib/              工具库
   ↓
 PostgreSQL (translation_tasks)
 ```
+
+**Python 后端（已归档）**: `source_back/` 目录保留完整 FastAPI 实现作为参考
 
 ---
 
 ## 关键路径
 
-| 功能 | 前端 | 后端 API | 后端服务 |
-|------|------|---------|---------|
-| 翻译 | `/translate` | `POST /api/translate/upload` | `engine.py` |
-| 状态 | `/translate` | `GET /api/translate/status/{id}` | `tasks.py` |
-| 历史 | `/history` | `GET /api/translate/history` | `tasks.py` |
+| 功能 | 前端页面 | API Routes | 状态 |
+|------|---------|-----------|------|
+| 翻译 | `/translate` | `POST /api/translate` | 🚧 骨架 |
+| 状态 | `/translate` | `GET /api/translate/[id]` | 🚧 骨架 |
+| 历史 | `/history` | `GET /api/history` | 🚧 骨架 |
+| 词库 | `/glossary` | - | ⏳ 未实现 |
 
 ---
 
 ## 重要事项
 
-### ⚠️ 严重 Bug (P0)
+### 🎯 当前状态 (v3.0.0)
 
-1. **PDF 切片**: `app/service/office/pdf_service.py:27` - 语法错误 `i+i+` 应为 `i:i+`
-2. **Word 格式丢失**: `docx_service.py:98` - `restore_text_to_docx()` 被注释
-3. **无认证机制**: 任何人可访问，需添加 auth
+**已完成**:
+- ✅ 目录重构（Python 移至 source_back）
+- ✅ Next.js 页面和组件（翻译、历史、词库骨架）
+- ✅ API Routes 骨架（translate, history）
+- ✅ UI 组件库（shadcn/ui）
 
-### 🎯 优先级
+**待实现**:
+- ⏳ API Routes 业务逻辑（调用 LLM）
+- ⏳ 数据库集成（Prisma ORM）
+- ⏳ 文件上传和处理
+- ⏳ 认证系统（NextAuth.js）
+- ⏳ 术语库功能
 
-- P0: 修复 Bug + 添加认证
-- P1: Excel 批量翻译 + PPT 并行
+### 📋 优先级
+
+- P0: 实现翻译 API 核心逻辑
+- P1: 数据库集成 + 认证
 - P2: 术语库 + 前后对比
 
 ---
@@ -71,11 +87,13 @@ PostgreSQL (translation_tasks)
 
 **.env 必需**:
 ```bash
-DATABASE_URL=postgresql+asyncpg://blue_focus@localhost:5432/ai_translate
+DATABASE_URL=postgresql://blue_focus@localhost:5432/ai_translate
 OPENAI_API_KEY=sk-xxx  # 至少配置一个
+NEXTAUTH_SECRET=xxx     # 生成: openssl rand -base64 32
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-**Python**: 3.10.x (不支持 3.13)
+**Node.js**: 18.x+ | **包管理器**: npm
 
 ---
 
@@ -83,11 +101,16 @@ OPENAI_API_KEY=sk-xxx  # 至少配置一个
 
 @/Users/blue_focus/Desktop/work/program/ai_translate_office/ai_server_translate_office/cc_code/docs/PROJECT_FILES_EXPLAINED.md
 
-@/Users/blue_focus/Desktop/work/program/ai_translate_office/ai_server_translate_office/README.md
+@/Users/blue_focus/Desktop/work/program/ai_translate_office/ai_server_translate_office/cc_code/docs/web/
 
 ---
 
 ## 对话历史记录
+
+### v3.0.0 - 2026-02-12
+- 主题: 重构为 Next.js 全栈架构
+- 记录: `.chat_history/nextjs_restructure/master_restructure.md`
+- 摘要: Python 移至 source_back，创建 Next.js API Routes 骨架
 
 ### v2.0.0 - 2026-02-12
 - 主题: 目录整理 + 项目结构说明

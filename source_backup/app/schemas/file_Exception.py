@@ -1,2 +1,0 @@
-class UnsupportFileException(Exception):
-    pass

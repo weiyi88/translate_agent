@@ -44,6 +44,7 @@ source_backup/
 .claude/
 _bmad-output/
 _bmad/
+cc_code/
 
 # Logs
 *.log

@@ -3,10 +3,19 @@
 """
 import asyncio
 import logging
+from typing import TYPE_CHECKING
+from uuid import UUID
 
-from app.core.engine import TranslationEngine
 from app.core.queue import TaskQueue
 from app.models.task import TranslationTask, TaskStatus
+from app.services.factory import TranslationServiceFactory
+from app.service.langchain.index import LLM_obj
+from app.util.config import Settings
+from app.db.database import get_db
+from app.db.repository import TaskRepository
+
+if TYPE_CHECKING:
+    from app.core.engine import TranslationEngine
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +35,7 @@ class TaskScheduler:
     def __init__(
         self,
         max_concurrent_tasks: int = 3,
-        engine: TranslationEngine = None,
+        engine: "TranslationEngine" = None,
     ):
         self.max_concurrent_tasks = max_concurrent_tasks
         self.engine = engine
@@ -37,6 +46,9 @@ class TaskScheduler:
         # 运行状态
         self.is_running = False
         self._workers: list[asyncio.Task] = []
+
+        # 翻译服务工厂
+        self.translation_factory = TranslationServiceFactory()
 
     async def start(self) -> None:
         """启动调度器"""
@@ -142,17 +154,80 @@ class TaskScheduler:
         Raises:
             Exception: 翻译失败
         """
-        # TODO: 实现实际的翻译逻辑
-        # 这里应该调用现有的翻译服务
+        logger.info(f"开始翻译任务: {task.id}, 文件类型: {task.file_type}")
 
-        logger.info(f"Translating {task.file_path} to {task.target_language}")
+        # 进度回调（同时更新内存和数据库）
+        async def progress_callback(progress: float, message: str):
+            task.progress = progress
+            logger.info(f"Task {task.id}: [{progress:.1f}%] {message}")
 
-        # 模拟翻译进度
-        for i in range(0, 101, 10):
-            task.progress = float(i)
-            await asyncio.sleep(0.1)
+            # 更新数据库
+            try:
+                async for db in get_db():
+                    repo = TaskRepository(db)
+                    await repo.update_task(
+                        task_id=UUID(task.id),
+                        progress=progress
+                    )
+                    await db.commit()
+                    break  # 只需要一个 session
+            except Exception as e:
+                logger.warning(f"更新数据库进度失败: {e}")
 
-        # 设置输出路径
-        task.output_path = f"/output/{task.id}_{task.target_language}.{task.file_type}"
+        try:
+            # 创建 LLM 服务
+            llm_service = LLM_obj(task.model)
 
-        logger.info(f"Translation completed: {task.output_path}")
+            # 根据文件类型选择服务
+            if task.file_type == "pptx":
+                # 创建 PPT 翻译服务
+                service = self.translation_factory.create_ppt_service(
+                    llm_service=llm_service,
+                    progress_callback=progress_callback,
+                )
+
+                # 构建输出路径
+                output_path = f"{Settings.FILE_OUTPUT_PATH}{task.id}.pptx"
+
+                # 执行翻译
+                output_path = await service.translate(
+                    file_path=task.file_path,
+                    target_language=task.target_language,
+                    output_path=output_path,
+                )
+
+                task.output_path = output_path
+
+                # 更新数据库输出路径
+                try:
+                    async for db in get_db():
+                        repo = TaskRepository(db)
+                        await repo.update_task(
+                            task_id=UUID(task.id),
+                            output_path=output_path
+                        )
+                        await db.commit()
+                        break
+                except Exception as e:
+                    logger.warning(f"更新数据库输出路径失败: {e}")
+
+            elif task.file_type == "docx":
+                # TODO: 实现 Word 翻译
+                raise NotImplementedError("Word 翻译尚未实现")
+
+            elif task.file_type == "xlsx":
+                # TODO: 实现 Excel 翻译
+                raise NotImplementedError("Excel 翻译尚未实现")
+
+            elif task.file_type == "pdf":
+                # TODO: 实现 PDF 翻译
+                raise NotImplementedError("PDF 翻译尚未实现")
+
+            else:
+                raise ValueError(f"不支持的文件类型: {task.file_type}")
+
+            logger.info(f"翻译完成: {task.output_path}")
+
+        except Exception as e:
+            logger.error(f"翻译任务失败: {task.id}, 错误: {e}", exc_info=True)
+            raise

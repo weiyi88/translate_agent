@@ -2,7 +2,6 @@
 任务管理 API
 """
 from fastapi import APIRouter, HTTPException, status
-from typing import list
 
 from app.core.engine import TranslationEngine
 from app.models.task import (

@@ -1,38 +1,73 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
+import { unlink } from 'fs/promises'
+import { join } from 'path'
 
 /**
  * GET /api/translate/[id]
  * 查询指定翻译任务的状态
- *
- * TODO: 实现功能
- * 1. 从数据库查询任务
- * 2. 返回任务详情和进度
- *
- * 参考 Python 实现：source_back/app/api/tasks.py
  */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // 验证用户登录
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const taskId = params.id
 
-    // TODO: 从数据库查询任务状态
+    // 查询任务
+    const task = await prisma.translationTask.findUnique({
+      where: { id: taskId },
+      include: {
+        glossary: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    if (!task) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    }
+
+    // 验证任务所有权
+    if (task.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
     return NextResponse.json({
-      success: false,
-      message: 'Task status API not implemented yet',
-      data: {
-        id: taskId,
-        status: 'pending',
-        progress: 0,
-      }
-    }, { status: 501 })
+      task: {
+        id: task.id,
+        fileName: task.fileName,
+        fileType: task.fileType,
+        sourceLanguage: task.sourceLanguage,
+        targetLanguage: task.targetLanguage,
+        model: task.model,
+        glossary: task.glossary,
+        status: task.status,
+        progress: task.progress,
+        outputPath: task.outputPath,
+        errorType: task.errorType,
+        errorMessage: task.errorMessage,
+        pagesCount: task.pagesCount,
+        estimatedTokens: task.estimatedTokens,
+        actualTokens: task.actualTokens,
+        createdAt: task.createdAt,
+        startedAt: task.startedAt,
+        completedAt: task.completedAt,
+      },
+    })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 })
+    console.error('Get task error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
@@ -45,19 +80,52 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // 验证用户登录
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const taskId = params.id
 
-    // TODO: 从数据库删除任务记录和文件
+    // 查询任务
+    const task = await prisma.translationTask.findUnique({
+      where: { id: taskId },
+    })
+
+    if (!task) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    }
+
+    // 验证任务所有权
+    if (task.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    // 删除文件
+    try {
+      if (task.filePath) {
+        await unlink(join(process.cwd(), task.filePath))
+      }
+      if (task.outputPath) {
+        await unlink(join(process.cwd(), task.outputPath))
+      }
+    } catch (fileError) {
+      console.warn('File deletion warning:', fileError)
+      // 文件可能已被删除，继续删除数据库记录
+    }
+
+    // 删除数据库记录
+    await prisma.translationTask.delete({
+      where: { id: taskId },
+    })
 
     return NextResponse.json({
-      success: false,
-      message: 'Delete task API not implemented yet',
-      data: { id: taskId }
-    }, { status: 501 })
+      message: 'Task deleted successfully',
+      id: taskId,
+    })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 })
+    console.error('Delete task error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

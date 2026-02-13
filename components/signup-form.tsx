@@ -132,8 +132,24 @@ export function SignupForm() {
     setErrorMessage('')
 
     try {
-      // 模拟API调用
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      // Call registration API
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email.trim(),
+          password: formData.password,
+          name: formData.name.trim(),
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || '注册失败')
+      }
 
       setIsSuccess(true)
       setSuccessMessage('注册成功！正在跳转到登录页面...')
@@ -143,7 +159,8 @@ export function SignupForm() {
         window.location.href = '/login'
       }, 1000)
     } catch (error) {
-      setErrorMessage('注册失败，请稍后重试')
+      const errorMsg = error instanceof Error ? error.message : '注册失败，请稍后重试'
+      setErrorMessage(errorMsg)
       setTimeout(() => setErrorMessage(''), 5000)
     } finally {
       setIsLoading(false)

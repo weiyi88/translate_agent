@@ -127,16 +127,28 @@ export function LoginForm() {
     }))
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Call NextAuth signIn
+      const { signIn } = await import('next-auth/react')
+      const result = await signIn('credentials', {
+        email: state.email,
+        password: state.password,
+        redirect: false,
+      })
 
-      // For demo: always succeed and redirect to dashboard
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-      }))
+      if (result?.error) {
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: '邮箱或密码错误，请重试',
+          showError: true,
+        }))
+        return
+      }
+
+      // Success - redirect to dashboard
       router.push('/dashboard')
-    } catch {
+    } catch (error) {
+      console.error('Login error:', error)
       setState((prev) => ({
         ...prev,
         isLoading: false,

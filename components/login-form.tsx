@@ -145,8 +145,8 @@ export function LoginForm() {
         return
       }
 
-      // Success - redirect to translate page
-      router.push('/translate')
+      // Success - redirect to dashboard
+      router.push('/dashboard')
     } catch (error) {
       console.error('Login error:', error)
       setState((prev) => ({

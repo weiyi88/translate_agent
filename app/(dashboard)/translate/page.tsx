@@ -104,9 +104,9 @@ export default function TranslatePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-background border-b border-border sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
@@ -118,7 +118,7 @@ export default function TranslatePage() {
               </Link>
               <div>
                 <h1 className="text-xl font-display font-semibold">文档翻译</h1>
-                <p className="text-sm text-gray-600">上传文件，AI 智能翻译</p>
+                <p className="text-sm text-muted-foreground">上传文件，AI 智能翻译</p>
               </div>
             </div>
 
@@ -192,7 +192,7 @@ export default function TranslatePage() {
                   <div className="space-y-4">
                     {/* Target Language */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         目标语言
                       </label>
                       <QuickLanguageSelector
@@ -216,7 +216,7 @@ export default function TranslatePage() {
 
                     {/* Model Selection */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         AI 模型
                       </label>
                       <ModelSelector value={model} onChange={setModel} />
@@ -224,7 +224,7 @@ export default function TranslatePage() {
 
                     {/* Glossary */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         词库 (可选)
                       </label>
                       <select className="input" disabled>
@@ -259,9 +259,9 @@ export default function TranslatePage() {
                   </div>
 
                   {/* Usage Info */}
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <p className="text-sm text-gray-600 text-center">
-                      本月剩余翻译额度: <span className="font-semibold text-gray-900">85 页</span> / 100 页
+                  <div className="mt-4 pt-4 border-t border-border">
+                    <p className="text-sm text-muted-foreground text-center">
+                      本月剩余翻译额度: <span className="font-semibold text-foreground">85 页</span> / 100 页
                     </p>
                   </div>
                 </Card>
@@ -279,7 +279,7 @@ export default function TranslatePage() {
           <TabsContent value="chat" className="space-y-6">
             <Card className="p-6">
               <h2 className="text-lg font-display font-semibold mb-4">对话翻译</h2>
-              <p className="text-gray-600">实时文本翻译功能，即将推出...</p>
+              <p className="text-muted-foreground">实时文本翻译功能，即将推出...</p>
             </Card>
           </TabsContent>
 
@@ -287,7 +287,7 @@ export default function TranslatePage() {
           <TabsContent value="history" className="space-y-6">
             <Card className="p-6 text-center">
               <h2 className="text-lg font-display font-semibold mb-4">翻译历史</h2>
-              <p className="text-gray-600 mb-4">查看和管理所有翻译记录</p>
+              <p className="text-muted-foreground mb-4">查看和管理所有翻译记录</p>
               <Link href="/dashboard/history">
                 <Button className="btn-primary">
                   查看完整历史记录

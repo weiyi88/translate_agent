@@ -102,14 +102,14 @@ export default function GlossaryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-background border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div>
               <h1 className="text-xl font-display font-semibold">词库管理</h1>
-              <p className="text-sm text-gray-600">管理专业术语，确保翻译一致性</p>
+              <p className="text-sm text-muted-foreground">管理专业术语，确保翻译一致性</p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -137,7 +137,7 @@ export default function GlossaryPage() {
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         词库名称
                       </label>
                       <Input
@@ -147,7 +147,7 @@ export default function GlossaryPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         描述
                       </label>
                       <Input
@@ -177,7 +177,7 @@ export default function GlossaryPage() {
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Left - Glossary List */}
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
               我的词库 ({glossaries.length})
             </h2>
             {glossaries.map((glossary) => (
@@ -186,13 +186,13 @@ export default function GlossaryPage() {
                 className={`p-4 cursor-pointer transition-all duration-200 ${
                   selectedGlossary?.id === glossary.id
                     ? 'border-2 border-primary-500 bg-primary-50'
-                    : 'hover:border-gray-300'
+                    : 'hover:border-border'
                 }`}
                 onClick={() => setSelectedGlossary(glossary)}
               >
-                <h3 className="font-semibold text-gray-900 mb-1">{glossary.name}</h3>
-                <p className="text-sm text-gray-600 mb-3">{glossary.description}</p>
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <h3 className="font-semibold text-foreground mb-1">{glossary.name}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{glossary.description}</p>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{glossary.termCount} 个术语</span>
                   <Badge className="badge-primary">{glossary.language}</Badge>
                 </div>
@@ -209,7 +209,7 @@ export default function GlossaryPage() {
                   <h2 className="text-lg font-display font-semibold">
                     {selectedGlossary?.name}
                   </h2>
-                  <p className="text-sm text-gray-600">{selectedGlossary?.description}</p>
+                  <p className="text-sm text-muted-foreground">{selectedGlossary?.description}</p>
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
@@ -227,7 +227,7 @@ export default function GlossaryPage() {
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           源语言术语
                         </label>
                         <Input
@@ -237,7 +237,7 @@ export default function GlossaryPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           目标语言术语
                         </label>
                         <Input
@@ -247,7 +247,7 @@ export default function GlossaryPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           上下文/注释（可选）
                         </label>
                         <Input
@@ -257,7 +257,7 @@ export default function GlossaryPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           分类（可选）
                         </label>
                         <Input
@@ -281,7 +281,7 @@ export default function GlossaryPage() {
 
               {/* Search */}
               <div className="relative mb-6">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="搜索术语..."
                   value={searchQuery}
@@ -294,7 +294,7 @@ export default function GlossaryPage() {
               <div className="border rounded-lg overflow-hidden">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-gray-50">
+                    <TableRow className="bg-muted/50">
                       <TableHead className="w-[30%]">源语言</TableHead>
                       <TableHead className="w-[30%]">目标语言</TableHead>
                       <TableHead className="w-[20%]">分类</TableHead>
@@ -303,7 +303,7 @@ export default function GlossaryPage() {
                   </TableHeader>
                   <TableBody>
                     {filteredTerms.map((term) => (
-                      <TableRow key={term.id} className="hover:bg-gray-50">
+                      <TableRow key={term.id} className="hover:bg-muted/50">
                         <TableCell className="font-medium">{term.source}</TableCell>
                         <TableCell>{term.target}</TableCell>
                         <TableCell>
@@ -329,7 +329,7 @@ export default function GlossaryPage() {
                     ))}
                     {filteredTerms.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                           {searchQuery ? '未找到匹配的术语' : '暂无术语，点击上方按钮添加'}
                         </TableCell>
                       </TableRow>
@@ -341,18 +341,18 @@ export default function GlossaryPage() {
               {/* Stats */}
               <div className="mt-6 grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{terms.length}</p>
-                  <p className="text-sm text-gray-600">总术语数</p>
+                  <p className="text-2xl font-bold text-foreground">{terms.length}</p>
+                  <p className="text-sm text-muted-foreground">总术语数</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {new Set(terms.map((t) => t.category)).size}
                   </p>
-                  <p className="text-sm text-gray-600">分类数量</p>
+                  <p className="text-sm text-muted-foreground">分类数量</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">100%</p>
-                  <p className="text-sm text-gray-600">使用率</p>
+                  <p className="text-2xl font-bold text-foreground">100%</p>
+                  <p className="text-sm text-muted-foreground">使用率</p>
                 </div>
               </div>
             </Card>

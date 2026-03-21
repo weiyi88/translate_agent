@@ -71,7 +71,7 @@ export default function HistoryPage() {
       case 'processing':
         return <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-400" />;
+        return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -93,9 +93,9 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <header className="bg-background border-b border-border sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
@@ -107,7 +107,7 @@ export default function HistoryPage() {
               </Link>
               <div>
                 <h1 className="text-xl font-display font-semibold">翻译历史</h1>
-                <p className="text-sm text-gray-600">共 {total} 条记录</p>
+                <p className="text-sm text-muted-foreground">共 {total} 条记录</p>
               </div>
             </div>
 
@@ -143,14 +143,14 @@ export default function HistoryPage() {
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
-            <span className="ml-3 text-gray-600">加载中...</span>
+            <span className="ml-3 text-muted-foreground">加载中...</span>
           </div>
         ) : history.length === 0 ? (
           // Empty State
           <Card className="p-12 text-center">
-            <FileText className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">暂无翻译记录</h3>
-            <p className="text-gray-600 mb-6">开始你的第一次翻译吧</p>
+            <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">暂无翻译记录</h3>
+            <p className="text-muted-foreground mb-6">开始你的第一次翻译吧</p>
             <Link href="/dashboard/translate">
               <Button className="btn-primary">
                 去翻译
@@ -167,27 +167,27 @@ export default function HistoryPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       {getStatusIcon(task.status)}
-                      <h3 className="font-semibold text-gray-900">{task.file_name || '未命名文件'}</h3>
-                      <span className="text-sm px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+                      <h3 className="font-semibold text-foreground">{task.file_name || '未命名文件'}</h3>
+                      <span className="text-sm px-2 py-0.5 rounded bg-muted text-muted-foreground">
                         {task.file_type?.toUpperCase()}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
                       <div>
-                        <span className="text-gray-500">状态:</span>{' '}
+                        <span className="text-muted-foreground">状态:</span>{' '}
                         <span className="font-medium">{getStatusText(task.status)}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">进度:</span>{' '}
+                        <span className="text-muted-foreground">进度:</span>{' '}
                         <span className="font-medium">{task.progress}%</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">模型:</span>{' '}
+                        <span className="text-muted-foreground">模型:</span>{' '}
                         <span className="font-medium">{task.model || 'N/A'}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">创建时间:</span>{' '}
+                        <span className="text-muted-foreground">创建时间:</span>{' '}
                         <span className="font-medium">{formatDate(task.created_at)}</span>
                       </div>
                     </div>
@@ -234,7 +234,7 @@ export default function HistoryPage() {
             >
               上一页
             </Button>
-            <span className="px-4 py-2 text-sm text-gray-600">
+            <span className="px-4 py-2 text-sm text-muted-foreground">
               第 {page} 页 / 共 {Math.ceil(total / pageSize)} 页
             </span>
             <Button

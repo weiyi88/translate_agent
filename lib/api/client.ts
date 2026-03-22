@@ -1,4 +1,4 @@
-import { API_CONFIG, ApiResponse, TaskResult } from "./types"
+import { API_CONFIG, ApiResponse, TaskResult, UsageStats } from "./types"
 
 /**
  * API 客户端类
@@ -114,6 +114,23 @@ class ApiClient {
    */
   async getHistoryDetail(taskId: string): Promise<ApiResponse<TaskResult>> {
     return this.request<TaskResult>(API_CONFIG.ENDPOINTS.HISTORY + "/" + taskId)
+  }
+
+  /**
+   * 查询本月用量统计
+   */
+  async getUsage(): Promise<ApiResponse<UsageStats>> {
+    try {
+      const response = await fetch('/api/usage')
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Unknown error' }))
+        return { error: error.error || 'HTTP ' + response.status }
+      }
+      const data = await response.json()
+      return { data }
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Network error' }
+    }
   }
 
   /**

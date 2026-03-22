@@ -52,6 +52,20 @@ export interface TaskResult extends TranslationTask {
 }
 
 /**
+ * 用量统计
+ */
+export interface UsageStats {
+  plan: 'FREE' | 'PRO' | 'ENTERPRISE'
+  status: 'ACTIVE' | 'CANCELED' | 'EXPIRED' | 'TRIAL'
+  translations_used: number
+  translations_limit: number | null  // null = unlimited
+  characters_used: number
+  characters_limit: number | null    // null = unlimited
+  period_start: string
+  period_end: string
+}
+
+/**
  * 创建任务请求
  */
 export interface TaskCreateRequest {

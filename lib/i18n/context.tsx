@@ -34,7 +34,7 @@ export function TranslationProvider({ children }: { children: React.ReactNode })
     setLanguage(language === 'zh' ? 'en' : 'zh')
   }, [language, setLanguage])
 
-  const t = translations[language]
+  const t = translations[language] as TranslationKeys
 
   return (
     <TranslationContext.Provider value={{ language, setLanguage, t, toggleLanguage }}>

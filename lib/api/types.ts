@@ -1,77 +1,69 @@
-/**
- * API 配置
- */
+// API Types
+
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || '',
   ENDPOINTS: {
-    TRANSLATE_UPLOAD: "/api/translate/upload",
-    TRANSLATE_STATUS: "/api/translate/status",
-    TRANSLATE_DOWNLOAD: "/api/translate/download",
-    HISTORY: "/api/translate/history",
+    TRANSLATE_UPLOAD: '/api/translate',
+    TRANSLATE_STATUS: '/api/translate',
+    TRANSLATE_DOWNLOAD: '/api/translate',
+    HISTORY: '/api/history',
+    USAGE: '/api/usage',
+    GLOSSARY: '/api/glossary',
   },
 }
 
-/**
- * API 响应类型
- */
 export interface ApiResponse<T> {
   data?: T
   error?: string
-  message?: string
 }
 
-/**
- * 任务状态类型
- */
-export type TaskStatus = "pending" | "queued" | "processing" | "completed" | "failed"
+export type TaskStatus = 'PENDING' | 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'CANCELED'
 
-/**
- * 翻译任务
- */
-export interface TranslationTask {
-  task_id: string
-  status: TaskStatus
-  file_path: string
-  file_type: string
-  target_language: string
-  model: string
-  priority: number
-  created_at: string
-  started_at?: string
-  completed_at?: string
-  error?: string
-  depends_on?: string[]
-}
-
-/**
- * 任务结果
- */
-export interface TaskResult extends TranslationTask {
-  output_path?: string
+export interface TaskResult {
+  id: string
+  task_id?: string
+  fileName?: string
+  file_name?: string
+  fileType?: string
+  file_type?: string
+  sourceLanguage?: string | null
+  targetLanguage?: string
+  model?: string
+  status: string
   progress: number
+  outputPath?: string | null
+  errorMessage?: string | null
+  error_message?: string | null
+  createdAt?: string
+  created_at?: string
+  startedAt?: string | null
+  completedAt?: string | null
 }
 
-/**
- * 用量统计
- */
+export interface TranslationTask extends TaskResult {}
+
+export interface TaskCreateRequest {
+  file: File
+  targetLanguage: string
+  model?: string
+  glossaryId?: string
+}
+
 export interface UsageStats {
-  plan: 'FREE' | 'PRO' | 'ENTERPRISE'
-  status: 'ACTIVE' | 'CANCELED' | 'EXPIRED' | 'TRIAL'
-  translations_used: number
-  translations_limit: number | null  // null = unlimited
-  characters_used: number
-  characters_limit: number | null    // null = unlimited
-  period_start: string
-  period_end: string
+  currentPeriodPages?: number
+  pagesLimit?: number | null
+  currentPeriodTokens?: number
+  plan?: string
+  translations_used?: number
+  translations_limit?: number | null
+  characters_used?: number
+  characters_limit?: number | null
 }
 
-/**
- * 词库
- */
 export interface GlossaryItem {
   id: string
   name: string
-  description: string | null
+  description?: string | null
   targetLanguage: string
   termCount: number
   isShared: boolean
@@ -79,26 +71,13 @@ export interface GlossaryItem {
   updatedAt: string
 }
 
-/**
- * 术语
- */
 export interface TermItem {
   id: string
+  glossaryId: string
   source: string
   target: string
-  context: string | null
-  category: string | null
+  context?: string | null
+  category?: string | null
   createdAt: string
-}
-
-/**
- * 创建任务请求
- */
-export interface TaskCreateRequest {
-  file_path: string
-  file_type: "pptx" | "docx" | "xlsx" | "pdf"
-  target_language: string
-  model: string
-  priority?: number
-  depends_on?: string[]
+  updatedAt: string
 }

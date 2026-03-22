@@ -229,7 +229,7 @@ export default function DashboardPage() {
                         className="h-full bg-gradient-to-r from-pink-400 to-orange-300 rounded-full transition-all duration-500"
                         style={{
                           width: usageStats && usageStats.translations_limit
-                            ? `${Math.min((usageStats.translations_used / usageStats.translations_limit) * 100, 100)}%`
+                            ? `${Math.min(((usageStats.translations_used ?? 0) / usageStats.translations_limit) * 100, 100)}%`
                             : '0%'
                         }}
                       />
@@ -242,7 +242,7 @@ export default function DashboardPage() {
                       </span>
                       <span className="font-medium text-foreground">
                         {usageStats
-                          ? `${usageStats.characters_used.toLocaleString()} / ${usageStats.characters_limit ? usageStats.characters_limit.toLocaleString() : '∞'}`
+                          ? `${( usageStats.characters_used ?? 0).toLocaleString()} / ${usageStats.characters_limit ? usageStats.characters_limit.toLocaleString() : '∞'}`
                           : '-- / --'}
                       </span>
                     </div>
@@ -251,7 +251,7 @@ export default function DashboardPage() {
                         className="h-full bg-gradient-to-r from-amber-400 to-orange-300 rounded-full transition-all duration-500"
                         style={{
                           width: usageStats && usageStats.characters_limit
-                            ? `${Math.min((usageStats.characters_used / usageStats.characters_limit) * 100, 100)}%`
+                            ? `${Math.min(((usageStats.characters_used ?? 0) / usageStats.characters_limit) * 100, 100)}%`
                             : '0%'
                         }}
                       />

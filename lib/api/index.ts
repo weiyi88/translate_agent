@@ -9,4 +9,7 @@ export type {
   TaskResult,
   TaskStatus,
   TranslationTask,
+  UsageStats,
+  GlossaryItem,
+  TermItem,
 } from "./types"

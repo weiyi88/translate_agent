@@ -54,3 +54,5 @@ v3_prd.md
 docs/
 supabase/
 tsconfig.tsbuildinfo
+.vercel
+.cc_code/

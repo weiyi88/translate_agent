@@ -81,6 +81,7 @@ model User {
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
   // Relations
+  accounts          Account[]
   subscription      Subscription?     @relation("UserSubscription")
   translationTasks  TranslationTask[] @relation("UserTasks")
   glossaries        Glossary[]        @relation("UserGlossaries")
@@ -231,4 +232,33 @@ model UsageLog {
   @@index([action])
   @@index([createdAt(sort: Desc)])
   @@map("usage_logs")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }

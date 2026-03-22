@@ -102,6 +102,8 @@ model Subscription {
   cancelAtPeriodEnd    Boolean             @default(false) @map("cancel_at_period_end")
   stripeCustomerId     String?             @unique @map("stripe_customer_id")
   stripeSubscriptionId String?             @unique @map("stripe_subscription_id")
+  translationPagesLimit Int?               @map("translation_pages_limit")  // NULL = unlimited
+  characterLimit       Int?               @map("character_limit")            // NULL = unlimited
   createdAt            DateTime            @default(now()) @map("created_at")
   updatedAt            DateTime            @updatedAt @map("updated_at")
 
@@ -163,9 +165,10 @@ model Glossary {
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   // Relations
-  user             User              @relation("UserGlossaries", fields: [userId], references: [id], onDelete: Cascade)
-  terms            Term[]            @relation("GlossaryTerms")
-  translationTasks TranslationTask[] @relation("TaskGlossary")
+  user             User               @relation("UserGlossaries", fields: [userId], references: [id], onDelete: Cascade)
+  terms            Term[]             @relation("GlossaryTerms")
+  termInvertedIndex TermInvertedIndex[] @relation("GlossaryIndex")
+  translationTasks TranslationTask[]  @relation("TaskGlossary")
 
   @@index([userId])
   @@index([userId, createdAt(sort: Desc)])
@@ -189,6 +192,23 @@ model Term {
   @@index([glossaryId, source])
   @@index([category])
   @@map("terms")
+}
+
+model TermInvertedIndex {
+  id         String   @id @default(dbgenerated("gen_random_uuid()::text"))
+  glossaryId String   @map("glossary_id")
+  token      String
+  termIds    String[] @map("term_ids")
+  frequency  Int      @default(1)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  glossary Glossary @relation("GlossaryIndex", fields: [glossaryId], references: [id], onDelete: Cascade)
+
+  @@unique([glossaryId, token], name: "unique_glossary_token")
+  @@index([glossaryId], name: "idx_inverted_glossary")
+  @@map("term_inverted_index")
 }
 
 model UsageLog {

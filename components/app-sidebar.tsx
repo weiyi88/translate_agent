@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useTranslation } from '@/lib/i18n'
 import { useTheme } from '@/lib/theme'
 import { cn } from '@/lib/utils'
@@ -26,7 +27,6 @@ import {
   Code,
   ChevronDown,
   Languages,
-  Upload,
   Heart,
   Sparkles,
 } from 'lucide-react'
@@ -37,12 +37,7 @@ const mainNavItems = [
   { icon: FileText, label: '文档翻译', labelEn: 'Document', href: '/translate' },
   { icon: MessageSquare, label: '对话翻译', labelEn: 'Chat', href: '/chat' },
   { icon: Clock, label: '翻译历史', labelEn: 'History', href: '/history' },
-]
-
-// Glossary submenu items
-const glossarySubItems = [
-  { icon: BookOpen, label: '词库管理', labelEn: 'Manage', href: '/glossary', action: null },
-  { icon: Upload, label: '导入词库', labelEn: 'Import', href: null, action: 'import' as const },
+  { icon: BookOpen, label: '词库', labelEn: 'Glossary', href: '/glossary' },
 ]
 
 // Settings submenu items
@@ -58,8 +53,13 @@ export function AppSidebar() {
   const pathname = usePathname()
   const { language, toggleLanguage } = useTranslation()
   const { theme, toggleTheme } = useTheme()
+  const { data: session } = useSession()
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
   const [isMounted, setIsMounted] = useState(false)
+
+  const userName = session?.user?.name ?? (language === 'zh' ? '你好，用户' : 'Hi, User')
+  const userEmail = session?.user?.email ?? 'user@example.com'
+  const userImage = session?.user?.image ?? undefined
 
   // Load expanded menus from localStorage on mount
   useEffect(() => {
@@ -111,16 +111,16 @@ export function AppSidebar() {
       <div className="p-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3 p-2 rounded-2xl bg-sidebar-accent/50">
           <Avatar className="h-9 w-9 ring-2 ring-pink-300/50">
-            <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+            <AvatarImage src={userImage} alt="User" />
             <AvatarFallback className="bg-gradient-to-br from-pink-300 to-orange-200 text-white text-sm font-medium">
-              U
+              {userName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-sidebar-foreground truncate">
-              {language === 'zh' ? '你好，用户' : 'Hi, User'}
+              {language === 'zh' ? userName : userName}
             </p>
-            <p className="text-xs text-sidebar-foreground/60 truncate">user@example.com</p>
+            <p className="text-xs text-sidebar-foreground/60 truncate">{userEmail}</p>
           </div>
         </div>
       </div>
@@ -147,71 +147,6 @@ export function AppSidebar() {
             </Link>
           )
         })}
-
-        {/* Glossary with Expandable Submenu */}
-        <div>
-          <button
-            onClick={() => toggleMenu('glossary')}
-            className={cn(
-              'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200',
-              pathname.startsWith('/glossary')
-                ? 'bg-gradient-to-r from-pink-400 to-orange-300 text-white shadow-md shadow-pink-200/50'
-                : 'text-sidebar-foreground hover:bg-sidebar-accent'
-            )}
-          >
-            <BookOpen className={cn('h-5 w-5', pathname.startsWith('/glossary') ? 'text-white' : 'text-pink-400')} />
-            <span className="text-sm font-medium flex-1 text-left">
-              {language === 'zh' ? '词库' : 'Glossary'}
-            </span>
-            <ChevronDown className={cn(
-              'h-4 w-4 transition-transform duration-200',
-              expandedMenus.includes('glossary') ? 'rotate-180' : ''
-            )} />
-          </button>
-          
-          {/* Glossary Submenu */}
-          <div className={cn(
-            'overflow-hidden transition-all duration-200',
-            expandedMenus.includes('glossary') ? 'max-h-40 mt-1' : 'max-h-0'
-          )}>
-            <div className="ml-4 pl-4 border-l-2 border-pink-200 dark:border-pink-800 space-y-1">
-              {glossarySubItems.map((subItem) => {
-                const SubIcon = subItem.icon
-                const subActive = subItem.href ? pathname === subItem.href : false
-                if (subItem.href) {
-                  return (
-                    <Link
-                      key={subItem.label}
-                      href={subItem.href}
-                      className={cn(
-                        'flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 active:scale-[0.97] active:bg-pink-200 dark:active:bg-pink-900',
-                        subActive
-                          ? 'bg-pink-100 dark:bg-pink-900/50 text-pink-600 dark:text-pink-300 font-medium shadow-sm'
-                          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
-                      )}
-                    >
-                      <SubIcon className="h-4 w-4" />
-                      <span>{language === 'zh' ? subItem.label : subItem.labelEn}</span>
-                    </Link>
-                  )
-                }
-                return (
-                  <button
-                    key={subItem.label}
-                    type="button"
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent('open-glossary-import'))
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 active:scale-[0.97] active:bg-pink-200 dark:active:bg-pink-900 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                  >
-                    <SubIcon className="h-4 w-4" />
-                    <span>{language === 'zh' ? subItem.label : subItem.labelEn}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
 
         {/* Settings with Expandable Submenu */}
         <div>

@@ -5,7 +5,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Zap, Award, ChevronDown, Check, Info } from 'lucide-react';
+import { Sparkles, Zap, Award, ChevronDown, Check, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -20,32 +20,32 @@ export interface AIModel {
   provider: string;
   description: string;
   icon: 'sparkle' | 'zap' | 'award';
-  speed: 'fast' | 'medium' | 'slow';
   quality: 'standard' | 'high' | 'premium';
   pricePer1kTokens: number;
+  free: boolean;
   recommended?: boolean;
 }
 
 const MODELS: AIModel[] = [
   {
-    id: 'gpt-4o-mini',
-    name: 'GPT-4o Mini',
+    id: 'gpt-5-mini',
+    name: 'GPT-5 Mini',
     provider: 'OpenAI',
-    description: '快速且经济，适合日常翻译',
+    description: '快速经济，适合日常翻译',
     icon: 'zap',
-    speed: 'fast',
     quality: 'standard',
     pricePer1kTokens: 0.15,
+    free: true,
   },
   {
     id: 'gpt-4o',
     name: 'GPT-4o',
     provider: 'OpenAI',
-    description: '平衡性能和成本，推荐选择',
+    description: '平衡性能与成本，推荐选择',
     icon: 'sparkle',
-    speed: 'medium',
     quality: 'high',
     pricePer1kTokens: 2.5,
+    free: false,
     recommended: true,
   },
   {
@@ -54,16 +54,17 @@ const MODELS: AIModel[] = [
     provider: 'Anthropic',
     description: '高质量翻译，擅长长文本',
     icon: 'award',
-    speed: 'medium',
     quality: 'premium',
     pricePer1kTokens: 3.0,
+    free: false,
   },
 ];
 
-interface ModelSelectorProps {
-  value?: string;
-  onChange?: (value: string) => void;
-}
+const QUALITY_LABELS = {
+  standard: { text: '标准质量', color: 'bg-muted text-muted-foreground' },
+  high: { text: '高质量', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
+  premium: { text: '顶级质量', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' },
+};
 
 const ICONS = {
   sparkle: Sparkles,
@@ -71,118 +72,98 @@ const ICONS = {
   award: Award,
 };
 
-const SPEED_LABELS = {
-  fast: { text: '快速', color: 'bg-green-100 text-green-700' },
-  medium: { text: '中等', color: 'bg-yellow-100 text-yellow-700' },
-  slow: { text: '较慢', color: 'bg-red-100 text-red-700' },
-};
-
-const QUALITY_LABELS = {
-  standard: { text: '标准', color: 'bg-gray-100 text-gray-700' },
-  high: { text: '高质量', color: 'bg-blue-100 text-blue-700' },
-  premium: { text: '顶级', color: 'bg-purple-100 text-purple-700' },
-};
+interface ModelSelectorProps {
+  value?: string;
+  onChange?: (value: string) => void;
+}
 
 export function ModelSelector({ value, onChange }: ModelSelectorProps) {
   const [open, setOpen] = useState(false);
 
-  const selectedModel = MODELS.find((model) => model.id === value);
+  const selectedModel = MODELS.find((m) => m.id === value) ?? MODELS[0];
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-          {selectedModel ? (
-            <span className="flex items-center gap-2">
-              {selectedModel.recommended && (
-                <Badge className="badge-primary text-xs">推荐</Badge>
-              )}
-              <ModelIcon model={selectedModel} className="w-4 h-4" />
-              <span>{selectedModel.name}</span>
-            </span>
-          ) : (
-            <span className="flex items-center gap-2 text-gray-400">
-              <Sparkles className="w-4 h-4" />
-              选择 AI 模型
-            </span>
-          )}
+          <span className="flex items-center gap-2">
+            <ModelIcon model={selectedModel} className="w-4 h-4 text-muted-foreground" />
+            <span>{selectedModel.name}</span>
+            {selectedModel.free && (
+              <Badge className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 text-xs">免费</Badge>
+            )}
+          </span>
           <ChevronDown className="w-4 h-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start" sideOffset={4}>
-        <div className="p-2">
-          {MODELS.map((model) => {
-            const Icon = ICONS[model.icon];
-            const isSelected = value === model.id;
+      <PopoverContent className="w-96 p-1" align="start" sideOffset={4}>
+        {MODELS.map((model) => {
+          const isSelected = (value ?? MODELS[0].id) === model.id;
+          const isLocked = !model.free;
 
-            return (
-              <button
-                key={model.id}
-                onClick={() => {
+          return (
+            <button
+              key={model.id}
+              disabled={isLocked}
+              onClick={() => {
+                if (!isLocked) {
                   onChange?.(model.id);
                   setOpen(false);
-                }}
-                className={`
-                  w-full flex items-start gap-3 p-4 rounded-lg transition-all duration-200
-                  ${isSelected ? 'bg-primary-50 border-2 border-primary-500' : 'hover:bg-gray-50 border-2 border-transparent'}
-                `}
-              >
-                {/* Check Icon */}
-                <div className="flex-shrink-0 pt-1">
-                  <div className={`
-                    w-5 h-5 rounded-full border-2 flex items-center justify-center
-                    ${isSelected ? 'border-primary-500 bg-primary-500' : 'border-gray-300'}
-                  `}>
-                    {isSelected && <Check className="w-3 h-3 text-white" />}
-                  </div>
-                </div>
+                }
+              }}
+              className={`
+                w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors
+                ${isSelected ? 'bg-accent' : ''}
+                ${isLocked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent cursor-pointer'}
+              `}
+            >
+              {/* 选中状态 */}
+              <div className="w-4 flex-shrink-0">
+                {isSelected && !isLocked && <Check className="w-4 h-4 text-primary" />}
+                {isLocked && <Lock className="w-4 h-4 text-muted-foreground" />}
+              </div>
 
-                {/* Icon */}
-                <div className={`
-                  w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0
-                  ${isSelected ? 'bg-primary-100' : 'bg-gray-100'}
-                `}>
-                  <Icon className={`w-5 h-5 ${isSelected ? 'text-primary-600' : 'text-gray-600'}`} />
-                </div>
+              {/* 模型图标 */}
+              <ModelIcon model={model} className="w-4 h-4 text-muted-foreground flex-shrink-0" />
 
-                {/* Content */}
-                <div className="flex-1 text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`font-semibold ${isSelected ? 'text-primary-700' : 'text-gray-900'}`}>
-                      {model.name}
-                    </span>
-                    {model.recommended && (
-                      <Badge className="badge-primary text-xs">推荐</Badge>
-                    )}
-                  </div>
-                  <p className={`text-sm mb-2 ${isSelected ? 'text-primary-600' : 'text-gray-600'}`}>
-                    {model.description}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs">
-                    <Badge className={SPEED_LABELS[model.speed].color}>
-                      {SPEED_LABELS[model.speed].text}
-                    </Badge>
-                    <Badge className={QUALITY_LABELS[model.quality].color}>
-                      {QUALITY_LABELS[model.quality].text}
-                    </Badge>
-                    <span className="text-gray-500">
-                      ¥{model.pricePer1kTokens}/1K tokens
-                    </span>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+              {/* 模型名 */}
+              <span className={`w-28 text-left font-medium truncate ${isLocked ? 'text-muted-foreground' : 'text-foreground'}`}>
+                {model.name}
+                {model.recommended && (
+                  <span className="ml-1 text-xs text-primary">推荐</span>
+                )}
+              </span>
 
-        {/* Info Footer */}
-        <div className="border-t border-gray-200 p-3 bg-gray-50">
-          <div className="flex items-start gap-2 text-xs text-gray-600">
-            <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-            <p>
-              不同模型的翻译质量和速度有所不同。GPT-4o Mini 适合快速翻译，Claude 3.5 Sonnet 适合高质量翻译。
-            </p>
-          </div>
+              {/* 费用标签 */}
+              {model.free ? (
+                <Badge className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 text-xs flex-shrink-0">
+                  免费
+                </Badge>
+              ) : (
+                <Badge className="bg-muted text-muted-foreground text-xs flex-shrink-0">
+                  订阅
+                </Badge>
+              )}
+
+              {/* 质量标签 */}
+              <Badge className={`${QUALITY_LABELS[model.quality].color} text-xs flex-shrink-0`}>
+                {QUALITY_LABELS[model.quality].text}
+              </Badge>
+
+              {/* 价格 */}
+              <span className="text-xs text-muted-foreground flex-shrink-0 font-mono">
+                ¥{model.pricePer1kTokens}/1K
+              </span>
+            </button>
+          );
+        })}
+
+        {/* 底部提示 */}
+        <div className="border-t border-border mt-1 pt-2 pb-1 px-3">
+          <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <Lock className="w-3 h-3" />
+            升级订阅后可解锁 GPT-4o、Claude 等高级模型
+          </p>
         </div>
       </PopoverContent>
     </Popover>
@@ -200,37 +181,32 @@ export function ModelComparison() {
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
-            <th className="text-left py-3 px-4 font-semibold text-gray-900">模型</th>
-            <th className="text-center py-3 px-4 font-semibold text-gray-900">速度</th>
-            <th className="text-center py-3 px-4 font-semibold text-gray-900">质量</th>
-            <th className="text-right py-3 px-4 font-semibold text-gray-900">价格</th>
+          <tr className="border-b border-border">
+            <th className="text-left py-3 px-4 font-semibold text-foreground">模型</th>
+            <th className="text-center py-3 px-4 font-semibold text-foreground">质量</th>
+            <th className="text-right py-3 px-4 font-semibold text-foreground">价格</th>
           </tr>
         </thead>
         <tbody>
           {MODELS.map((model) => (
-            <tr key={model.id} className="border-b border-gray-100 hover:bg-gray-50">
+            <tr key={model.id} className="border-b border-border hover:bg-muted/50">
               <td className="py-3 px-4">
                 <div className="flex items-center gap-2">
-                  <ModelIcon model={model} className="w-4 h-4" />
-                  <span className="font-medium">{model.name}</span>
+                  <ModelIcon model={model} className="w-4 h-4 text-muted-foreground" />
+                  <span className="font-medium text-foreground">{model.name}</span>
                   {model.recommended && (
                     <Badge className="badge-primary text-xs">推荐</Badge>
                   )}
+                  {!model.free && <Lock className="w-3 h-3 text-muted-foreground" />}
                 </div>
-              </td>
-              <td className="text-center py-3 px-4">
-                <Badge className={SPEED_LABELS[model.speed].color}>
-                  {SPEED_LABELS[model.speed].text}
-                </Badge>
               </td>
               <td className="text-center py-3 px-4">
                 <Badge className={QUALITY_LABELS[model.quality].color}>
                   {QUALITY_LABELS[model.quality].text}
                 </Badge>
               </td>
-              <td className="text-right py-3 px-4 font-mono text-sm">
-                ¥{model.pricePer1kTokens}/1K
+              <td className="text-right py-3 px-4 font-mono text-sm text-foreground">
+                {model.free ? <span className="text-green-600 dark:text-green-400">免费</span> : `¥${model.pricePer1kTokens}/1K`}
               </td>
             </tr>
           ))}

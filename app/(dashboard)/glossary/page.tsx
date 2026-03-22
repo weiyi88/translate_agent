@@ -4,8 +4,8 @@
  */
 'use client';
 
-import { useState } from 'react';
-import { Plus, Upload, Download, Search, Edit, Trash2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Plus, Upload, Download, Search, Edit, Trash2, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -47,37 +47,36 @@ interface Glossary {
 }
 
 export default function GlossaryPage() {
-  const [glossaries, setGlossaries] = useState<Glossary[]>([
-    {
-      id: '1',
-      name: '技术术语库',
-      description: '常用技术术语中英对照',
-      language: 'en',
-      termCount: 156,
-      createdAt: '2026-01-15',
-      updatedAt: '2026-02-01',
-    },
-    {
-      id: '2',
-      name: '法律术语库',
-      description: '法律文档专用术语',
-      language: 'en',
-      termCount: 89,
-      createdAt: '2026-01-20',
-      updatedAt: '2026-01-28',
-    },
-  ]);
+  // TODO: replace with GET /api/glossary when implemented
+  const [glossaries, setGlossaries] = useState<Glossary[]>([]);
 
-  const [selectedGlossary, setSelectedGlossary] = useState<Glossary | null>(glossaries[0]);
-  const [terms, setTerms] = useState<Term[]>([
-    { id: '1', source: '人工智能', target: 'Artificial Intelligence', category: '技术' },
-    { id: '2', source: '机器学习', target: 'Machine Learning', category: '技术' },
-    { id: '3', source: '深度学习', target: 'Deep Learning', category: '技术' },
-  ]);
+  const [selectedGlossary, setSelectedGlossary] = useState<Glossary | null>(null);
+  // TODO: replace with GET /api/glossary/[id]/terms when implemented
+  const [terms, setTerms] = useState<Term[]>([]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTerm, setNewTerm] = useState({ source: '', target: '', context: '', category: '' });
+
+  const handleDownloadSample = () => {
+    const csv = '原文,译文,语种\n人工智能,Artificial Intelligence,英语\n机器学习,Machine Learning,英语\n';
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'glossary_sample.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleUploadConfirm = () => {
+    // TODO: 调用后端上传接口
+    setUploadFile(null);
+    setIsUploadDialogOpen(false);
+  };
 
   const filteredTerms = terms.filter((term) =>
     term.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -177,9 +176,20 @@ export default function GlossaryPage() {
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Left - Glossary List */}
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-              我的词库 ({glossaries.length})
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                我的词库 ({glossaries.length})
+              </h2>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs px-2"
+                onClick={() => setIsUploadDialogOpen(true)}
+              >
+                <Upload className="w-3 h-3 mr-1" />
+                上传词库
+              </Button>
+            </div>
             {glossaries.map((glossary) => (
               <Card
                 key={glossary.id}
@@ -339,7 +349,7 @@ export default function GlossaryPage() {
               </div>
 
               {/* Stats */}
-              <div className="mt-6 grid grid-cols-3 gap-4">
+              <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-foreground">{terms.length}</p>
                   <p className="text-sm text-muted-foreground">总术语数</p>
@@ -350,15 +360,64 @@ export default function GlossaryPage() {
                   </p>
                   <p className="text-sm text-muted-foreground">分类数量</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">100%</p>
-                  <p className="text-sm text-muted-foreground">使用率</p>
-                </div>
               </div>
             </Card>
           </div>
         </div>
       </main>
+
+      {/* Upload Glossary Dialog */}
+      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>上传词库</DialogTitle>
+            <DialogDescription>
+              上传 CSV 或 Excel 文件导入词库，每行格式：原文、译文、语种
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border border-border">
+              <div>
+                <p className="text-sm font-medium text-foreground">示例词库文件</p>
+                <p className="text-xs text-muted-foreground">CSV 格式，含原文、译文、语种列</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleDownloadSample}>
+                <FileDown className="w-4 h-4 mr-1.5" />
+                下载示例
+              </Button>
+            </div>
+            <div
+              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+              {uploadFile ? (
+                <p className="text-sm font-medium text-foreground">{uploadFile.name}</p>
+              ) : (
+                <>
+                  <p className="text-sm text-foreground font-medium">点击或拖拽上传</p>
+                  <p className="text-xs text-muted-foreground mt-1">支持 .csv、.xlsx 格式</p>
+                </>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.xlsx"
+                className="hidden"
+                onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setUploadFile(null); setIsUploadDialogOpen(false); }}>
+              取消
+            </Button>
+            <Button className="btn-primary" disabled={!uploadFile} onClick={handleUploadConfirm}>
+              确认上传
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

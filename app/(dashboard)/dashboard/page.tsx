@@ -1,10 +1,11 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { AppLayout } from '@/components/app-layout'
 import { useTranslation } from '@/lib/i18n'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import {
   FileText,
@@ -23,13 +24,8 @@ import {
   Sparkles,
   Sun,
 } from 'lucide-react'
-
-// Mock data
-const recentTranslations = [
-  { id: '1', name: 'presentation.pptx', type: 'pptx', status: 'completed', time: '2分钟前', progress: 100 },
-  { id: '2', name: 'report.docx', type: 'docx', status: 'completed', time: '1小时前', progress: 100 },
-  { id: '3', name: 'contract.pdf', type: 'pdf', status: 'processing', time: '正在处理', progress: 65 },
-]
+import { apiClient } from '@/lib/api'
+import type { UsageStats } from '@/lib/api/types'
 
 const quickActions = [
   { icon: FileText, labelZh: '上传文档', labelEn: 'Upload Document', href: '/translate', color: 'from-pink-400 to-rose-400' },
@@ -38,15 +34,41 @@ const quickActions = [
   { icon: Clock, labelZh: '翻译历史', labelEn: 'View History', href: '/history', color: 'from-violet-400 to-purple-400' },
 ]
 
-const usageStats = {
-  translationsUsed: 45,
-  translationsLimit: 100,
-  charactersUsed: 125000,
-  charactersLimit: 500000,
+interface RecentTranslation {
+  id: string
+  name: string
+  type: string
+  status: string
+  time: string
+  progress: number
 }
 
 export default function DashboardPage() {
   const { t, language } = useTranslation()
+  const { data: session } = useSession()
+  const userName = session?.user?.name ?? (language === 'zh' ? '用户' : 'User')
+  const [recentTranslations, setRecentTranslations] = useState<RecentTranslation[]>([])
+  const [usageStats, setUsageStats] = useState<UsageStats | null>(null)
+
+  useEffect(() => {
+    apiClient.getHistory({ page_size: 3 }).then((res) => {
+      if (res.data?.items) {
+        setRecentTranslations(
+          res.data.items.map((task: any) => ({
+            id: task.id,
+            name: task.fileName ?? task.file_name ?? '',
+            type: (task.fileName ?? task.file_name ?? '').split('.').pop() ?? '',
+            status: task.status,
+            time: task.status === 'processing' ? '正在处理' : new Date(task.createdAt ?? task.created_at).toLocaleString(),
+            progress: task.progress ?? (task.status === 'completed' ? 100 : 0),
+          }))
+        )
+      }
+    })
+    apiClient.getUsage().then((res) => {
+      if (res.data) setUsageStats(res.data)
+    })
+  }, [])
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -90,7 +112,7 @@ export default function DashboardPage() {
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                        {language === 'zh' ? '您好，用户！' : 'Hello, User!'}
+                        {language === 'zh' ? `您好，${userName}！` : `Hello, ${userName}!`}
                         <Sparkles className="h-5 w-5 text-amber-500" />
                       </h2>
                       <p className="text-muted-foreground">
@@ -194,38 +216,50 @@ export default function DashboardPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">
-                        {language === 'zh' ? '翻译次数' : 'Translations'}
+                        {language === 'zh' ? '翻译页数' : 'Pages'}
                       </span>
                       <span className="font-medium text-foreground">
-                        {usageStats.translationsUsed} / {usageStats.translationsLimit}
+                        {usageStats
+                          ? `${usageStats.translations_used} / ${usageStats.translations_limit ?? '∞'}`
+                          : '-- / --'}
                       </span>
                     </div>
                     <div className="h-3 bg-muted rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-pink-400 to-orange-300 rounded-full transition-all duration-500"
-                        style={{ width: `${(usageStats.translationsUsed / usageStats.translationsLimit) * 100}%` }}
+                        style={{
+                          width: usageStats && usageStats.translations_limit
+                            ? `${Math.min((usageStats.translations_used / usageStats.translations_limit) * 100, 100)}%`
+                            : '0%'
+                        }}
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">
-                        {language === 'zh' ? '字符数' : 'Characters'}
+                        {language === 'zh' ? 'Tokens' : 'Tokens'}
                       </span>
                       <span className="font-medium text-foreground">
-                        {(usageStats.charactersUsed / 1000).toFixed(0)}K / {(usageStats.charactersLimit / 1000).toFixed(0)}K
+                        {usageStats
+                          ? `${usageStats.characters_used.toLocaleString()} / ${usageStats.characters_limit ? usageStats.characters_limit.toLocaleString() : '∞'}`
+                          : '-- / --'}
                       </span>
                     </div>
                     <div className="h-3 bg-muted rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-amber-400 to-orange-300 rounded-full transition-all duration-500"
-                        style={{ width: `${(usageStats.charactersUsed / usageStats.charactersLimit) * 100}%` }}
+                        style={{
+                          width: usageStats && usageStats.characters_limit
+                            ? `${Math.min((usageStats.characters_used / usageStats.characters_limit) * 100, 100)}%`
+                            : '0%'
+                        }}
                       />
                     </div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    className="w-full mt-4 border-border text-pink-500 hover:bg-pink-50 dark:hover:bg-pink-950/30 hover:text-pink-600 rounded-xl bg-transparent" 
+                  <Button
+                    variant="outline"
+                    className="w-full mt-4 border-border text-pink-500 hover:bg-pink-50 dark:hover:bg-pink-950/30 hover:text-pink-600 rounded-xl bg-transparent"
                     asChild
                   >
                     <Link href="/pricing">

@@ -10,7 +10,7 @@ import { join } from 'path'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 验证用户登录
@@ -19,7 +19,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const taskId = params.id
+    const { id: taskId } = await params
 
     // 查询任务
     const task = await prisma.translationTask.findUnique({

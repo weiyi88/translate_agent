@@ -1,4 +1,4 @@
-import { API_CONFIG, ApiResponse, TaskResult, UsageStats } from "./types"
+import { API_CONFIG, ApiResponse, TaskResult, UsageStats, GlossaryItem, TermItem } from "./types"
 
 /**
  * API 客户端类
@@ -134,6 +134,50 @@ class ApiClient {
   }
 
   /**
+   * 词库 CRUD
+   */
+  private async relativeRequest<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+    try {
+      const response = await fetch(path, {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...options.headers },
+      })
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Unknown error' }))
+        return { error: error.error || 'HTTP ' + response.status }
+      }
+      return { data: await response.json() }
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Network error' }
+    }
+  }
+
+  async getGlossaries(): Promise<ApiResponse<{ glossaries: GlossaryItem[] }>> {
+    return this.relativeRequest('/api/glossary')
+  }
+
+  async createGlossary(data: { name: string; description?: string; targetLanguage: string }): Promise<ApiResponse<{ glossary: GlossaryItem }>> {
+    return this.relativeRequest('/api/glossary', { method: 'POST', body: JSON.stringify(data) })
+  }
+
+  async deleteGlossary(id: string): Promise<ApiResponse<{ success: boolean }>> {
+    return this.relativeRequest(`/api/glossary/${id}`, { method: 'DELETE' })
+  }
+
+  async getTerms(glossaryId: string, search?: string): Promise<ApiResponse<{ terms: TermItem[] }>> {
+    const q = search ? `?search=${encodeURIComponent(search)}` : ''
+    return this.relativeRequest(`/api/glossary/${glossaryId}/terms${q}`)
+  }
+
+  async createTerm(glossaryId: string, data: { source: string; target: string; context?: string; category?: string }): Promise<ApiResponse<{ term: TermItem }>> {
+    return this.relativeRequest(`/api/glossary/${glossaryId}/terms`, { method: 'POST', body: JSON.stringify(data) })
+  }
+
+  async deleteTerm(glossaryId: string, termId: string): Promise<ApiResponse<{ success: boolean }>> {
+    return this.relativeRequest(`/api/glossary/${glossaryId}/terms/${termId}`, { method: 'DELETE' })
+  }
+
+  /**
    * 删除历史记录
    */
   async deleteHistory(taskId: string, deleteFiles: boolean = true): Promise<ApiResponse<{
@@ -182,4 +226,4 @@ class ApiClient {
 export const apiClient = new ApiClient()
 
 // 导出类型
-export type { ApiResponse, TaskResult }
+export type { ApiResponse, TaskResult, UsageStats, GlossaryItem, TermItem }

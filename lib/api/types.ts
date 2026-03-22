@@ -66,6 +66,32 @@ export interface UsageStats {
 }
 
 /**
+ * 词库
+ */
+export interface GlossaryItem {
+  id: string
+  name: string
+  description: string | null
+  targetLanguage: string
+  termCount: number
+  isShared: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+/**
+ * 术语
+ */
+export interface TermItem {
+  id: string
+  source: string
+  target: string
+  context: string | null
+  category: string | null
+  createdAt: string
+}
+
+/**
  * 创建任务请求
  */
 export interface TaskCreateRequest {

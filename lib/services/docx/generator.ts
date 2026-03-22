@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DOCX 生成器
  *

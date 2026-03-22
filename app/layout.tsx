@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Space_Grotesk, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SessionProvider } from 'next-auth/react'
 import { TranslationProvider } from '@/lib/i18n'
 import { ThemeProvider } from '@/lib/theme'
 import './globals.css'
@@ -47,9 +48,11 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
         <ThemeProvider>
-          <TranslationProvider>
-            {children}
-          </TranslationProvider>
+          <SessionProvider>
+            <TranslationProvider>
+              {children}
+            </TranslationProvider>
+          </SessionProvider>
         </ThemeProvider>
         <Analytics />
       </body>

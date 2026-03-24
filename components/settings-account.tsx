@@ -11,8 +11,8 @@ import { useTranslation } from '@/lib/i18n'
 
 export function SettingsAccount() {
   const { t } = useTranslation()
-  const [email, setEmail] = useState('user@example.com')
-  const [phoneNumber, setPhoneNumber] = useState('+86 138 0000 0000')
+  const [email, setEmail] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
 
@@ -24,11 +24,7 @@ export function SettingsAccount() {
     setTimeout(() => setSaveSuccess(false), 3000)
   }
 
-  const devices = [
-    { name: 'MacBook Pro', location: '北京', lastActive: '当前设备', current: true },
-    { name: 'iPhone 15 Pro', location: '上海', lastActive: '2小时前', current: false },
-    { name: 'Chrome on Windows', location: '深圳', lastActive: '1天前', current: false },
-  ]
+  const devices: { name: string; location: string; lastActive: string; current: boolean }[] = []
 
   return (
     <div className="space-y-6">

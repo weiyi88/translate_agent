@@ -12,10 +12,10 @@ export function SettingsProfile() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const [formData, setFormData] = useState({
-    name: '张三',
-    email: 'zhang@example.com',
-    company: 'TranslateAI',
-    position: '产品经理',
+    name: '',
+    email: '',
+    company: '',
+    position: '',
   })
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

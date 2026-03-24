@@ -11,7 +11,7 @@ export function SettingsAPI() {
   const { language } = useTranslation()
   const [activeTab, setActiveTab] = useState<'keys' | 'webhook'>('keys')
   const [copied, setCopied] = useState(false)
-  const [apiKey] = useState('sk_live_1234567890abcdef')
+  const [apiKey] = useState('')
 
   const handleCopyKey = () => {
     navigator.clipboard.writeText(apiKey)

@@ -33,8 +33,8 @@ const languages = [
 
 export function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const [config, setConfig] = useState<ConfigData>({
-    glossaryName: '技术术语库',
-    description: '计算机和编程相关术语',
+    glossaryName: '',
+    description: '',
     sourceLanguage: 'zh-CN',
     targetLanguage: 'en',
     skipDuplicates: true,

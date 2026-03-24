@@ -51,7 +51,7 @@ export const TRANSLATE_LANGUAGES = [
 
 // ── 词库配置 ──────────────────────────────────────────────────
 export const GLOSSARY = {
-  maxFileSizeMB: 10,             // 上传文件最大 MB
+  maxFileSizeMB: 50,             // 上传文件最大 MB
   supportedFormats: ['.csv', '.xlsx'], // 支持格式
   sampleCsvHeader: '原文,译文,语种', // 示例 CSV 表头
 }
